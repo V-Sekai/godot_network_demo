@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=7 format=3 uid="uid://dqhmviole3j0p"]
 
 [ext_resource type="PackedScene" uid="uid://e5n4pxj63niy" path="res://net_demo/scenes/SCENE_open_block.tscn" id="1_4i6jw"]
 [ext_resource type="PackedScene" uid="uid://cf8lyqjhvofmt" path="res://net_demo/scenes/SCENE_closed_scene.tscn" id="1_4ipqk"]
 [ext_resource type="PackedScene" uid="uid://cdlkb6ohd5ceo" path="res://net_demo/core/physics_object.tscn" id="1_le5bp"]
-
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_562c0"]
 

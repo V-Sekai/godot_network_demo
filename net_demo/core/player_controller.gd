@@ -56,7 +56,8 @@ func _process_rotation(p_movement_vector: Vector2) -> void:
 		var clamped_rotation_difference: float = 0.0
 		clamped_rotation_difference = rotation_difference
 
-		y_rotation += clamped_rotation_difference
+		y_rotation = cubic_interpolate_angle_in_time(y_rotation, y_rotation + clamped_rotation_difference,
+			y_rotation, y_rotation + clamped_rotation_difference, 1.0, get_process_delta_time(), 0, get_process_delta_time()) 
 
 func _process_movement(p_delta: float, p_movement_vector: Vector2, p_is_sprinting: bool) -> void:
 	var applied_gravity: float = -gravity if !is_on_floor() else 0.0

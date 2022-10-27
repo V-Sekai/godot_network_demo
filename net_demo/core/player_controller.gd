@@ -23,6 +23,8 @@ func _update_bobbing(p_velocity_length: float) -> void:
 	if camera_holder_node:
 		camera_holder_node.update_bobbing(p_velocity_length, MINIMUM_SPRINT_VELOCITY)
 
+var last_rotation : PackedFloat64Array = [0, 0] 
+
 func _process_rotation(p_movement_vector: Vector2) -> void:
 	var camera_holder_node: Node3D = get_node_or_null(camera_holder)
 	if !camera_holder_node:
@@ -57,7 +59,11 @@ func _process_rotation(p_movement_vector: Vector2) -> void:
 		clamped_rotation_difference = rotation_difference
 
 		y_rotation = cubic_interpolate_angle_in_time(y_rotation, y_rotation + clamped_rotation_difference,
-			y_rotation, y_rotation + clamped_rotation_difference, 1.0, get_process_delta_time(), 0, get_process_delta_time()) 
+			last_rotation[0], y_rotation + clamped_rotation_difference, 1.0, get_process_delta_time(), last_rotation[1], get_process_delta_time()) 
+		last_rotation[0] = y_rotation
+		last_rotation[1] = -get_process_delta_time()
+
+var last_movement : PackedVector3Array = [Vector3(), Vector3()] 
 
 func _process_movement(p_delta: float, p_movement_vector: Vector2, p_is_sprinting: bool) -> void:
 	var applied_gravity: float = -gravity if !is_on_floor() else 0.0
@@ -96,8 +102,10 @@ func _process_movement(p_delta: float, p_movement_vector: Vector2, p_is_sprintin
 		velocity * (Vector3.ONE - up_direction)
 	)
 	
-	horizontal_velocity = horizontal_velocity.cubic_interpolate_in_time(target_velocity, horizontal_velocity, target_velocity, acceleration * p_delta,
-	p_delta, 0, p_delta)
+	horizontal_velocity = horizontal_velocity.cubic_interpolate_in_time(target_velocity, last_movement[0], target_velocity, acceleration * p_delta,
+	p_delta, last_movement[1].x, p_delta)
+	last_movement[0] = horizontal_velocity
+	last_movement[1] = Vector3(-p_delta, -p_delta, -p_delta)
 	
 	velocity = (
 		applied_gravity_vector + \

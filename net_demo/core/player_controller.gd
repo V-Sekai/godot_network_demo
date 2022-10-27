@@ -58,8 +58,8 @@ func _process_rotation(p_movement_vector: Vector2) -> void:
 		var clamped_rotation_difference: float = 0.0
 		clamped_rotation_difference = rotation_difference
 
-		y_rotation = cubic_interpolate_angle_in_time(y_rotation, y_rotation + clamped_rotation_difference,
-			last_rotation[0], y_rotation + clamped_rotation_difference, 1.0, get_process_delta_time(), last_rotation[1], get_process_delta_time()) 
+		y_rotation = cubic_interpolate_angle_in_time(y_rotation, y_rotation + clamped_rotation_difference, last_rotation[0],
+		y_rotation + clamped_rotation_difference, 1.0, last_rotation[1], 0, get_process_delta_time()) 
 		last_rotation[0] = y_rotation
 		last_rotation[1] = -get_process_delta_time()
 
@@ -102,10 +102,10 @@ func _process_movement(p_delta: float, p_movement_vector: Vector2, p_is_sprintin
 		velocity * (Vector3.ONE - up_direction)
 	)
 	
-	horizontal_velocity = horizontal_velocity.cubic_interpolate_in_time(target_velocity, last_movement[0], target_velocity, acceleration * p_delta,
-	p_delta, last_movement[1].x, p_delta)
-	last_movement[0] = horizontal_velocity
-	last_movement[1] = Vector3(-p_delta, -p_delta, -p_delta)
+	horizontal_velocity = horizontal_velocity.cubic_interpolate_in_time(target_velocity, last_movement[0], target_velocity, 1.0, last_movement[1].x, 0,
+	acceleration * p_delta)
+	last_movement[0] = target_velocity
+	last_movement[1] = Vector3(-acceleration * p_delta, -acceleration * p_delta, -acceleration * p_delta)
 	
 	velocity = (
 		applied_gravity_vector + \

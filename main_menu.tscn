@@ -15,7 +15,6 @@ port_path = NodePath("HBoxContainer/VBoxContainer/Port")
 max_player_path = NodePath("HBoxContainer/VBoxContainer/MaxPlayers")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -23,19 +22,16 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-layout_mode = 2
 offset_right = 1152.0
 offset_bottom = 648.0
 size_flags_horizontal = 3
 
 [node name="IPLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
 offset_right = 1152.0
 offset_bottom = 26.0
 text = "IP"
 
 [node name="IP" type="LineEdit" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 30.0
 offset_right = 1152.0
 offset_bottom = 61.0
@@ -43,14 +39,12 @@ theme_override_font_sizes/font_size = 16
 text = "127.0.0.1"
 
 [node name="PortLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 65.0
 offset_right = 1152.0
 offset_bottom = 91.0
 text = "Port"
 
 [node name="Port" type="SpinBox" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 95.0
 offset_right = 1152.0
 offset_bottom = 126.0
@@ -59,14 +53,12 @@ max_value = 9999.0
 value = 7777.0
 
 [node name="MaxPlayersLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 130.0
 offset_right = 1152.0
 offset_bottom = 156.0
 text = "Max Players"
 
 [node name="MaxPlayers" type="SpinBox" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 160.0
 offset_right = 1152.0
 offset_bottom = 191.0
@@ -75,7 +67,6 @@ max_value = 128.0
 value = 32.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 195.0
 offset_right = 1152.0
 offset_bottom = 648.0
@@ -83,20 +74,17 @@ size_flags_vertical = 3
 alignment = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
-layout_mode = 2
 offset_top = 422.0
 offset_right = 1152.0
 offset_bottom = 453.0
 
 [node name="HostButton" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
 offset_right = 574.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
 text = "Host"
 
 [node name="JoinButton" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
 offset_left = 578.0
 offset_right = 1152.0
 offset_bottom = 31.0

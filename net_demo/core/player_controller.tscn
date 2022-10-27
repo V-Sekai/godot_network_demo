@@ -90,7 +90,7 @@ mesh = SubResource("BoxMesh_haw7c")
 skeleton = NodePath("../Base")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_interval = 0.1
+replication_interval = 0.05
 replication_config = SubResource("SceneReplicationConfig_6gyus")
 visibility_update_mode = 1
 

@@ -95,7 +95,8 @@ func _process_movement(p_delta: float, p_movement_vector: Vector2, p_is_sprintin
 		velocity * (Vector3.ONE - up_direction)
 	)
 	
-	horizontal_velocity = horizontal_velocity.lerp(target_velocity, acceleration * p_delta)
+	horizontal_velocity = horizontal_velocity.cubic_interpolate_in_time(target_velocity, target_velocity, horizontal_velocity, acceleration * p_delta,
+	p_delta, 0, p_delta)
 	
 	velocity = (
 		applied_gravity_vector + \

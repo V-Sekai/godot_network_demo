@@ -1,7 +1,7 @@
 extends MultiplayerSpawner
 
-const PLAYER_SCENE_PATH = "player_controller.tscn"
-const PLAYER_SCENE = preload(PLAYER_SCENE_PATH)
+const PLAYER_SCENE_PATH : String = "res://net_demo/core/player_controller.tscn"
+const PLAYER_SCENE : PackedScene = preload(PLAYER_SCENE_PATH)
 
 func _spawn_custom(data: Variant) -> Node:
 	if typeof(data) != TYPE_PACKED_BYTE_ARRAY:
@@ -16,8 +16,7 @@ func _spawn_custom(data: Variant) -> Node:
 	new_origin.y = data.decode_half(6)
 	new_origin.z = data.decode_half(8)
 	var y_rotation: float = data.decode_half(10)
-	
-	var new_player_scene = PLAYER_SCENE.instantiate()
+	var new_player_scene : Node3D = PLAYER_SCENE.instantiate()
 	new_player_scene.transform.origin = new_origin
 	new_player_scene.y_rotation = y_rotation
 	new_player_scene.multiplayer_color_id = data.decode_u8(12)

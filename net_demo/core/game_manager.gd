@@ -7,10 +7,10 @@ const player_spawner_const = preload("player_spawner.tscn")
 var player_spawner: MultiplayerSpawner = null
 
 func load_main_menu_scene() -> void:
-	assert(get_tree().change_scene_to_file("res://main_menu.tscn") == OK)
+	assert(get_tree().change_scene_to_file("res://net_demo/uiux/main_menu.tscn") == OK)
 
 func load_default_scene() -> void:
-	assert(get_tree().change_scene_to_file("res://game_map.tscn") == OK)
+	assert(get_tree().change_scene_to_file("res://net_demo/scenes/SCENE_game_map.tscn") == OK)
 
 func get_player_spawn_buffer(p_authority: int, p_transform: Transform3D) -> PackedByteArray:
 	var buf: PackedByteArray = PackedByteArray()

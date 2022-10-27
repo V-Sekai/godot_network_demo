@@ -11,15 +11,15 @@ config_version=5
 [application]
 
 config/name="NetDemo"
-run/main_scene="res://main_menu.tscn"
+run/main_scene="res://net_demo/uiux/main_menu.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 GodotMathExtension="*res://addons/math_util/math_funcs.gd"
-GameManager="*res://game_manager.gd"
-MultiplayerColorTable="*res://multiplayer_color_table.gd"
+GameManager="*res://net_demo/core/game_manager.gd"
+MultiplayerColorTable="*res://net_demo/core/multiplayer_color_table.gd"
 
 [editor_plugins]
 

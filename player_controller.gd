@@ -57,6 +57,12 @@ func _process_rotation(p_movement_vector: Vector2) -> void:
 		clamped_rotation_difference = rotation_difference
 
 		y_rotation += clamped_rotation_difference
+		
+		# Limit rotation range
+		while (y_rotation > PI):
+			y_rotation -= TAU
+		while (y_rotation < -PI):
+			y_rotation += TAU
 
 func _process_movement(p_delta: float, p_movement_vector: Vector2, p_is_sprinting: bool) -> void:
 	var applied_gravity: float = -gravity if !is_on_floor() else 0.0

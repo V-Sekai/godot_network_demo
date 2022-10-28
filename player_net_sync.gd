@@ -1,5 +1,7 @@
 extends Node
 
+const quantization_const = preload("res://quantization.gd")
+
 @export_node_path(CharacterBody3D) var player_controller: NodePath = NodePath()
 @onready var _player_controller_node: CharacterBody3D = get_node_or_null(player_controller)
 
@@ -15,7 +17,7 @@ var target_y_rotation: float = 0.0
 				buf.encode_half(0, _player_controller_node.transform.origin.x)
 				buf.encode_half(2, _player_controller_node.transform.origin.y)
 				buf.encode_half(4, _player_controller_node.transform.origin.z)
-				buf.encode_half(6, _player_controller_node.y_rotation)
+				buf.encode_s16(6, quantization_const.quantize_euler_angle_to_s16_angle(_player_controller_node.y_rotation))
 			
 		return buf
 		
@@ -29,7 +31,7 @@ var target_y_rotation: float = 0.0
 			target_origin.x = value.decode_half(0)
 			target_origin.y = value.decode_half(2)
 			target_origin.z = value.decode_half(4)
-			target_y_rotation = value.decode_half(6)
+			target_y_rotation = quantization_const.dequantize_s16_angle_to_euler_angle(value.decode_s16(6))
 			
 			if _player_controller_node:
 				_sync_values()

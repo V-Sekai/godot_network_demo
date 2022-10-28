@@ -11,20 +11,6 @@ func load_main_menu_scene() -> void:
 
 func load_default_scene() -> void:
 	assert(get_tree().change_scene_to_file("res://game_map.tscn") == OK)
-
-func get_player_spawn_buffer(p_authority: int, p_transform: Transform3D) -> PackedByteArray:
-	var buf: PackedByteArray = PackedByteArray()
-	var _resize_result: int = buf.resize(13)
-	buf.encode_u32(0, p_authority)
-	buf.encode_half(4, p_transform.origin.x)
-	buf.encode_half(6, p_transform.origin.y)
-	buf.encode_half(8, p_transform.origin.z)
-	buf.encode_half(10, p_transform.basis.get_euler().y)
-	var color_id: int = MultiplayerColorTable.get_multiplayer_material_index_for_peer_id(p_authority)
-	assert(color_id != -1)
-	buf.encode_u8(12, color_id)
-	
-	return buf
 	
 func get_random_spawn_point() -> Transform3D:
 	var spawn_points: Array = get_tree().get_nodes_in_group("spawners")
@@ -40,7 +26,7 @@ func _host_server(p_port: int, p_max_players: int) -> void:
 		multiplayer.multiplayer_peer = peer
 	
 		var spawn_point_transform: Transform3D = get_random_spawn_point()
-		var _new_player: Node = player_spawner.spawn(get_player_spawn_buffer(1, spawn_point_transform))
+		var _new_player: Node = player_spawner.spawn(player_spawner.get_player_spawn_buffer(1, spawn_point_transform))
 	else:
 		load_main_menu_scene()
 	
@@ -62,7 +48,7 @@ func _on_peer_connect(p_id : int) -> void:
 	print("_on_peer_connect(%s)" % str(p_id))
 	if multiplayer.is_server():
 		var spawn_point_transform: Transform3D = get_random_spawn_point()
-		var _new_player: Node = player_spawner.spawn(get_player_spawn_buffer(p_id, spawn_point_transform))
+		var _new_player: Node = player_spawner.spawn(player_spawner.get_player_spawn_buffer(p_id, spawn_point_transform))
 
 func _on_peer_disconnect(p_id : int) -> void:
 	print("_on_peer_disconnect(%s)" % str(p_id))

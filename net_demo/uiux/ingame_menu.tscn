@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dq8dus2qxr5o2"]
+[gd_scene load_steps=2 format=3 uid="uid://c18eb3u1xl8n4"]
 
-[ext_resource type="Script" path="res://ingame_menu.gd" id="1_0tt7j"]
+[ext_resource type="Script" path="res://net_demo/uiux/ingame_menu.gd" id="1_myiqj"]
 
 [node name="IngameMenu" type="Control"]
 layout_mode = 3
@@ -9,10 +9,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_0tt7j")
+script = ExtResource("1_myiqj")
 
 [node name="PeerIDLabel" type="Label" parent="."]
-layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 text = "Peer ID: "

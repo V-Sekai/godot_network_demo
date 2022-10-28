@@ -1,0 +1,409 @@
+[gd_scene load_steps=7 format=3 uid="uid://dqhmviole3j0p"]
+
+[ext_resource type="PackedScene" uid="uid://e5n4pxj63niy" path="res://net_demo/scenes/SCENE_open_block.tscn" id="1_4i6jw"]
+[ext_resource type="PackedScene" uid="uid://cf8lyqjhvofmt" path="res://net_demo/scenes/SCENE_closed_scene.tscn" id="1_4ipqk"]
+[ext_resource type="PackedScene" uid="uid://cdlkb6ohd5ceo" path="res://net_demo/core/physics_object.tscn" id="1_le5bp"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_562c0"]
+
+[sub_resource type="Sky" id="Sky_a3d4c"]
+sky_material = SubResource("PhysicalSkyMaterial_562c0")
+
+[sub_resource type="Environment" id="Environment_b8xra"]
+background_mode = 2
+sky = SubResource("Sky_a3d4c")
+tonemap_mode = 3
+
+[node name="GameMap" type="Node3D"]
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="ClosedScene" parent="Geometry" instance=ExtResource("1_4ipqk")]
+metadata/_edit_group_ = true
+
+[node name="ClosedScene2" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -10, -0.5, 0)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene22" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -10, -0.5, 10)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene30" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -10, -0.5, 20)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene31" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -10, -0.5, 30)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene32" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -10, -0.5, 40)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene33" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -10, -0.5, 50)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene34" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -10, -0.5, 60)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene35" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -10, -0.5, 69)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene36" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -10, -0.5, 79)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene3" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 20, -0.5, 0)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene4" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 10, -0.5, 0)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene5" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 40, -0.5, 0)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene6" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 30, -0.5, 0)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene7" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 60, -0.5, 0)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene8" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 50, -0.5, 0)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene9" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 80, -0.5, 0)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene10" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 70, -0.5, 0)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene11" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 89)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene12" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -10, -0.5, 89)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene13" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 20, -0.5, 89)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene14" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 10, -0.5, 89)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene15" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 40, -0.5, 89)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene16" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 30, -0.5, 89)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene17" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 60, -0.5, 89)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene18" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 50, -0.5, 89)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene19" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 80, -0.5, 89)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene20" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 70, -0.5, 89)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene21" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(-4.37114e-07, 0, 10, 0, 1, 0, -10, 0, -4.37114e-07, 89.9994, -0.5, 69.0024)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene23" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(-4.37114e-07, 0, 10, 0, 1, 0, -10, 0, -4.37114e-07, 89.9994, -0.5, 49.0024)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene24" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(-4.37114e-07, 0, 10, 0, 1, 0, -10, 0, -4.37114e-07, 89.9994, -0.5, 59.0024)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene25" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(-4.37114e-07, 0, 10, 0, 1, 0, -10, 0, -4.37114e-07, 89.9994, -0.5, 29.0024)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene26" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(-4.37114e-07, 0, 10, 0, 1, 0, -10, 0, -4.37114e-07, 89.9994, -0.5, 39.0024)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene27" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(-4.37114e-07, 0, 10, 0, 1, 0, -10, 0, -4.37114e-07, 89.9994, -0.5, 0.00238037)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene28" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(-4.37114e-07, 0, 10, 0, 1, 0, -10, 0, -4.37114e-07, 89.9994, -0.5, 19.0024)
+metadata/_edit_group_ = true
+
+[node name="ClosedScene29" parent="Geometry" instance=ExtResource("1_4ipqk")]
+transform = Transform3D(-4.37114e-07, 0, 10, 0, 1, 0, -10, 0, -4.37114e-07, 89.9994, -0.5, 10.0024)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" parent="Geometry" instance=ExtResource("1_4i6jw")]
+
+[node name="MeshInstance3D2" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 10, -0.5, 0)
+
+[node name="MeshInstance3D3" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 20, -0.5, 0)
+
+[node name="MeshInstance3D4" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 30, -0.5, 0)
+
+[node name="MeshInstance3D5" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 40, -0.5, 0)
+
+[node name="MeshInstance3D6" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 50, -0.5, 0)
+
+[node name="MeshInstance3D7" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 60, -0.5, 0)
+
+[node name="MeshInstance3D8" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 70, -0.5, 0)
+
+[node name="MeshInstance3D9" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 60, -0.5, 10)
+
+[node name="MeshInstance3D10" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 70, -0.5, 10)
+
+[node name="MeshInstance3D11" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 40, -0.5, 10)
+
+[node name="MeshInstance3D12" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 50, -0.5, 10)
+
+[node name="MeshInstance3D13" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 20, -0.5, 10)
+
+[node name="MeshInstance3D14" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 30, -0.5, 10)
+
+[node name="MeshInstance3D15" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 10)
+
+[node name="MeshInstance3D16" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 10, -0.5, 10)
+
+[node name="MeshInstance3D17" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 60, -0.5, 20)
+
+[node name="MeshInstance3D18" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 70, -0.5, 20)
+
+[node name="MeshInstance3D19" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 40, -0.5, 20)
+
+[node name="MeshInstance3D20" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 50, -0.5, 20)
+
+[node name="MeshInstance3D21" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 20, -0.5, 20)
+
+[node name="MeshInstance3D22" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 30, -0.5, 20)
+
+[node name="MeshInstance3D23" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 20)
+
+[node name="MeshInstance3D24" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 10, -0.5, 20)
+
+[node name="MeshInstance3D25" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 60, -0.5, 30)
+
+[node name="MeshInstance3D26" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 70, -0.5, 30)
+
+[node name="MeshInstance3D27" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 40, -0.5, 30)
+
+[node name="MeshInstance3D28" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 50, -0.5, 30)
+
+[node name="MeshInstance3D29" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 20, -0.5, 30)
+
+[node name="MeshInstance3D30" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 30, -0.5, 30)
+
+[node name="MeshInstance3D31" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 30)
+
+[node name="MeshInstance3D32" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 10, -0.5, 30)
+
+[node name="MeshInstance3D33" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 60, -0.5, 40)
+
+[node name="MeshInstance3D34" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 70, -0.5, 40)
+
+[node name="MeshInstance3D35" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 40, -0.5, 40)
+
+[node name="MeshInstance3D36" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 50, -0.5, 40)
+
+[node name="MeshInstance3D37" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 20, -0.5, 40)
+
+[node name="MeshInstance3D38" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 30, -0.5, 40)
+
+[node name="MeshInstance3D39" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 40)
+
+[node name="MeshInstance3D40" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 10, -0.5, 40)
+
+[node name="MeshInstance3D41" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 60, -0.5, 49)
+
+[node name="MeshInstance3D42" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 70, -0.5, 49)
+
+[node name="MeshInstance3D43" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 40, -0.5, 49)
+
+[node name="MeshInstance3D44" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 50, -0.5, 49)
+
+[node name="MeshInstance3D45" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 20, -0.5, 49)
+
+[node name="MeshInstance3D46" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 30, -0.5, 49)
+
+[node name="MeshInstance3D47" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 49)
+
+[node name="MeshInstance3D48" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 10, -0.5, 49)
+
+[node name="MeshInstance3D49" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 60, -0.5, 59)
+
+[node name="MeshInstance3D50" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 70, -0.5, 59)
+
+[node name="MeshInstance3D51" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 40, -0.5, 59)
+
+[node name="MeshInstance3D52" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 50, -0.5, 59)
+
+[node name="MeshInstance3D53" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 20, -0.5, 59)
+
+[node name="MeshInstance3D54" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 30, -0.5, 59)
+
+[node name="MeshInstance3D55" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 59)
+
+[node name="MeshInstance3D56" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 10, -0.5, 59)
+
+[node name="MeshInstance3D57" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 60, -0.5, 69)
+
+[node name="MeshInstance3D58" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 70, -0.5, 69)
+
+[node name="MeshInstance3D59" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 40, -0.5, 69)
+
+[node name="MeshInstance3D60" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 50, -0.5, 69)
+
+[node name="MeshInstance3D61" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 20, -0.5, 69)
+
+[node name="MeshInstance3D62" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 30, -0.5, 69)
+
+[node name="MeshInstance3D63" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 69)
+
+[node name="MeshInstance3D64" parent="Geometry" instance=ExtResource("1_4i6jw")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 10, -0.5, 69)
+
+[node name="PhysicsObjects" type="Node3D" parent="."]
+
+[node name="physics_object" parent="PhysicsObjects" instance=ExtResource("1_le5bp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.163749, 4.1)
+
+[node name="physics_object2" parent="PhysicsObjects" instance=ExtResource("1_le5bp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.289707, 0.163749, 4.1)
+
+[node name="physics_object3" parent="PhysicsObjects" instance=ExtResource("1_le5bp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.591042, 0.163749, 4.1)
+
+[node name="physics_object4" parent="PhysicsObjects" instance=ExtResource("1_le5bp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.891042, 0.163749, 4.1)
+
+[node name="physics_object5" parent="PhysicsObjects" instance=ExtResource("1_le5bp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.731491, 0.478302, 4.1)
+
+[node name="physics_object6" parent="PhysicsObjects" instance=ExtResource("1_le5bp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.431491, 0.478302, 4.1)
+
+[node name="physics_object7" parent="PhysicsObjects" instance=ExtResource("1_le5bp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.114923, 0.478302, 4.1)
+
+[node name="physics_object8" parent="PhysicsObjects" instance=ExtResource("1_le5bp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.26056, 0.803631, 4.1)
+
+[node name="physics_object9" parent="PhysicsObjects" instance=ExtResource("1_le5bp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56056, 0.803631, 4.1)
+
+[node name="physics_object10" parent="PhysicsObjects" instance=ExtResource("1_le5bp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.420011, 1.09384, 4.1)
+
+[node name="SpawnPoints" type="Node3D" parent="."]
+
+[node name="Spawn1" type="Marker3D" parent="SpawnPoints" groups=["spawners"]]
+
+[node name="Spawn2" type="Marker3D" parent="SpawnPoints" groups=["spawners"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
+
+[node name="Spawn3" type="Marker3D" parent="SpawnPoints" groups=["spawners"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
+
+[node name="Spawn4" type="Marker3D" parent="SpawnPoints" groups=["spawners"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 2)
+
+[node name="Spawn5" type="Marker3D" parent="SpawnPoints" groups=["spawners"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -2)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_b8xra")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 0, 0)
+shadow_enabled = true
+directional_shadow_blend_splits = true

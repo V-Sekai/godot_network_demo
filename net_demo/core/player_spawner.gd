@@ -1,9 +1,9 @@
 extends MultiplayerSpawner
 
-const PLAYER_SCENE_PATH = "player_controller.tscn"
-const PLAYER_SCENE = preload(PLAYER_SCENE_PATH)
+const PLAYER_SCENE_PATH : String = "res://net_demo/core/player_controller.tscn"
+const PLAYER_SCENE : PackedScene = preload(PLAYER_SCENE_PATH)
 
-const quantization_const = preload("res://quantization.gd")
+const quantization_const = preload("quantization.gd")
 
 func get_player_spawn_buffer(p_authority: int, p_transform: Transform3D) -> PackedByteArray:
 	var buf: PackedByteArray = PackedByteArray()
@@ -29,8 +29,7 @@ func _spawn_custom(data: Variant) -> Node:
 		
 	var new_origin: Vector3 = Vector3(data.decode_half(4), data.decode_half(6), data.decode_half(8))
 	var y_rotation: float = quantization_const.dequantize_s16_angle_to_euler_angle(data.decode_s16(10))
-	
-	var new_player_scene = PLAYER_SCENE.instantiate()
+	var new_player_scene : Node3D = PLAYER_SCENE.instantiate()
 	new_player_scene.transform.origin = new_origin
 	new_player_scene.y_rotation = y_rotation
 	new_player_scene.multiplayer_color_id = data.decode_u8(12)

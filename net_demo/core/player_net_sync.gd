@@ -1,6 +1,6 @@
 extends Node
 
-const quantization_const = preload("res://quantization.gd")
+const quantization_const = preload("quantization.gd")
 
 @export_node_path(CharacterBody3D) var player_controller: NodePath = NodePath()
 @onready var _player_controller_node: CharacterBody3D = get_node_or_null(player_controller)

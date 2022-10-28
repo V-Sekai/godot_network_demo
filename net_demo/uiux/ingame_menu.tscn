@@ -11,7 +11,19 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_myiqj")
 
-[node name="PeerIDLabel" type="Label" parent="."]
+[node name="PeerBoxContainer" type="HBoxContainer" parent="."]
 offset_right = 40.0
-offset_bottom = 23.0
+offset_bottom = 40.0
+
+[node name="PeerColorID" type="ColorRect" parent="PeerBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 64.0
+offset_bottom = 64.0
+color = Color(1, 1, 1, 0)
+
+[node name="PeerIDLabel" type="Label" parent="PeerBoxContainer"]
+offset_left = 68.0
+offset_top = 19.0
+offset_right = 133.0
+offset_bottom = 45.0
 text = "Peer ID: "

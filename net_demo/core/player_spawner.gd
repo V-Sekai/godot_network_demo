@@ -13,7 +13,7 @@ func get_player_spawn_buffer(p_authority: int, p_transform: Transform3D) -> Pack
 	buf.encode_half(6, p_transform.origin.y)
 	buf.encode_half(8, p_transform.origin.z)
 	buf.encode_s16(10, quantization_const.quantize_euler_angle_to_s16_angle(p_transform.basis.get_euler().y))
-	var color_id: int = MultiplayerColorTable.get_multiplayer_material_index_for_peer_id(p_authority)
+	var color_id: int = MultiplayerColorTable.get_multiplayer_material_index_for_peer_id(p_authority, true)
 	assert(color_id != -1)
 	buf.encode_u8(12, color_id)
 	
@@ -32,7 +32,11 @@ func _spawn_custom(data: Variant) -> Node:
 	var new_player_scene : Node3D = PLAYER_SCENE.instantiate()
 	new_player_scene.transform.origin = new_origin
 	new_player_scene.y_rotation = y_rotation
-	new_player_scene.multiplayer_color_id = data.decode_u8(12)
+	
+	var multiplayer_color_id: int = data.decode_u8(12)
+	MultiplayerColorTable.assign_multiplayer_color_table_entry(multiplayer_authority_id, multiplayer_color_id)
+	
+	new_player_scene.multiplayer_color_id = multiplayer_color_id
 	new_player_scene.set_multiplayer_authority(multiplayer_authority_id)
 	
 	return new_player_scene

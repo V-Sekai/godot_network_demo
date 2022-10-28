@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cdlkb6ohd5ceo"]
+[gd_scene load_steps=5 format=3 uid="uid://cdlkb6ohd5ceo"]
+
+[ext_resource type="Script" path="res://net_demo/core/physics_object.gd" id="1_usiqp"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_723tu"]
 size = Vector3(0.25, 0.25, 0.25)
@@ -6,12 +8,29 @@ size = Vector3(0.25, 0.25, 0.25)
 [sub_resource type="BoxShape3D" id="BoxShape3D_dmqq1"]
 size = Vector3(0.25, 0.25, 0.25)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_pwbj6"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/2/path = NodePath(".:authority")
+properties/2/spawn = true
+properties/2/sync = false
+
 [node name="physics_object" type="RigidBody3D"]
 collision_layer = 8
 collision_mask = 11
+script = ExtResource("1_usiqp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_723tu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_dmqq1")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.1
+replication_config = SubResource("SceneReplicationConfig_pwbj6")
+visibility_update_mode = 1

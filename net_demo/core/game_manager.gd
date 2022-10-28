@@ -79,6 +79,8 @@ func get_multiplayer_id() -> int:
 func _ready() -> void:
 	randomize()
 	
+	get_tree().set_multiplayer(MultiplayerExtension.new())
+	
 	player_spawner = player_spawner_const.instantiate()
 	player_spawner.name = "PlayerSpawner"
 	add_child(player_spawner)

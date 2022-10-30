@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://jfhnph7nx3su"]
 
 [ext_resource type="Script" path="res://net_demo/core/player_controller.gd" id="1_u1u4j"]
-[ext_resource type="Script" path="res://net_demo/core/player_net_sync.gd" id="2_c3vrl"]
+[ext_resource type="Script" path="res://net_demo/core/player_snapshot_interpolation.gd" id="2_7x5fr"]
 [ext_resource type="Script" path="res://net_demo/core/camera_holder.gd" id="3_7p7cm"]
 [ext_resource type="Script" path="res://net_demo/core/node3d_bobbing.gd" id="4_58mrl"]
 [ext_resource type="Script" path="res://net_demo/core/character_model_holder.gd" id="5_0vx7h"]
@@ -22,7 +22,7 @@ height = 1.2
 size = Vector3(0.1, 0.1, 0.5)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_6gyus"]
-properties/0/path = NodePath("PlayerNetSync:sync_net_state")
+properties/0/path = NodePath("PlayerSnapshotInterpolation:sync_net_state")
 properties/0/spawn = false
 properties/0/sync = true
 
@@ -37,8 +37,8 @@ script = ExtResource("1_u1u4j")
 camera_holder = NodePath("CameraHolder")
 use_controls = true
 
-[node name="PlayerNetSync" type="Node" parent="."]
-script = ExtResource("2_c3vrl")
+[node name="PlayerSnapshotInterpolation" type="Node" parent="."]
+script = ExtResource("2_7x5fr")
 player_controller = NodePath("..")
 
 [node name="CollisionBody" type="CollisionShape3D" parent="."]

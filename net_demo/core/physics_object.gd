@@ -2,6 +2,8 @@ extends RigidBody3D
 
 const physics_state_sync_const = preload("res://net_demo/core/physics_state_synchronizer.gd")
 
+# These values control how transparent this object should appear when it is
+# asleep vs when it's awake.
 const AWAKE_STATE_TRANSPARENCY = 0.0
 const SLEEP_STATE_TRANSPARENCY = 0.25
 

@@ -55,7 +55,7 @@ func _on_body_entered(p_body: PhysicsBody3D) -> void:
 			if multiplayer.has_multiplayer_peer():
 				update_color_id_and_material()
 			
-func _physics_process(p_delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	_update_sleep_visualization()
 	
 	if (multiplayer.has_multiplayer_peer() and is_multiplayer_authority()) or pending_authority_request:

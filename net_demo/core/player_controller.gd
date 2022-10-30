@@ -6,25 +6,29 @@ const camera_holder_const = preload("camera_holder.gd")
 @export_node_path var camera_holder: NodePath = NodePath()
 @export var use_controls: bool = false
 
-const MINIMUM_WALK_VELOCITY = 0.1
-const MINIMUM_SPRINT_VELOCITY = 3.0
+# Settings for controlling movement
+@export var walk_speed: float = 1.5
+@export var sprint_speed: float = 4.5
 
-const WALK_SPEED: float = 1.5
-const SPRINT_SPEED: float = 4.5
-
-const ACCELERATION = 16.0
-const DEACCELERATION = 16.0
+@export var acceleration: float = 16.0
+@export var deacceleration: float = 16.0
 
 # Index into the color table for multiplayer
 var multiplayer_color_id: int = -1
 
+# For interpolation (needs a lot more functionality though, study network
+# snapshot interpolation, hermite interpolation, ect.)
+var last_movement : PackedVector3Array = [Vector3(), Vector3()] 
+var last_rotation : PackedFloat64Array = [0, 0] 
+
+# Updates the purely visual camera bobbing effect for first-person mode
 func _update_bobbing(p_velocity_length: float) -> void:
 	var camera_holder_node: Node3D = get_node_or_null(camera_holder)
 	if camera_holder_node:
-		camera_holder_node.update_bobbing(p_velocity_length, MINIMUM_SPRINT_VELOCITY)
+		camera_holder_node.update_bobbing(p_velocity_length)
 
-var last_rotation : PackedFloat64Array = [0, 0] 
-
+# Calculates the correct rotation for a movement vector relative to the 
+# camera.
 func _process_rotation(p_movement_vector: Vector2) -> void:
 	var camera_holder_node: Node3D = get_node_or_null(camera_holder)
 	if !camera_holder_node:
@@ -70,8 +74,7 @@ func _process_rotation(p_movement_vector: Vector2) -> void:
 		last_rotation[0] = y_rotation
 		last_rotation[1] = -get_process_delta_time()
 
-var last_movement : PackedVector3Array = [Vector3(), Vector3()] 
-
+# Calculates kinetic movement for an input vector
 func _process_movement(p_delta: float, p_movement_vector: Vector2, p_is_sprinting: bool) -> void:
 	var applied_gravity: float = -gravity if !is_on_floor() else 0.0
 	
@@ -81,7 +84,7 @@ func _process_movement(p_delta: float, p_movement_vector: Vector2, p_is_sprintin
 		applied_gravity
 	) * up_direction
 	
-	var speed_modifier: float = SPRINT_SPEED if p_is_sprinting else WALK_SPEED
+	var speed_modifier: float = sprint_speed if p_is_sprinting else walk_speed
 	var movement_length: float = p_movement_vector.normalized().length()
 	
 	var is_moving: bool = movement_length > 0.0
@@ -101,18 +104,18 @@ func _process_movement(p_delta: float, p_movement_vector: Vector2, p_is_sprintin
 		p_movement_vector.normalized().length() * \
 		speed_modifier
 	
-	var acceleration = DEACCELERATION
+	var speed: float = deacceleration
 	if(is_moving):
-		acceleration = ACCELERATION
+		speed = acceleration
 		
 	var horizontal_velocity: Vector3 = (
 		velocity * (Vector3.ONE - up_direction)
 	)
 	
 	horizontal_velocity = horizontal_velocity.cubic_interpolate_in_time(target_velocity, last_movement[0], target_velocity, 1.0, last_movement[1].x, 0,
-	acceleration * p_delta)
+	speed * p_delta)
 	last_movement[0] = target_velocity
-	last_movement[1] = Vector3(-acceleration * p_delta, -acceleration * p_delta, -acceleration * p_delta)
+	last_movement[1] = Vector3(-speed * p_delta, -speed * p_delta, -speed * p_delta)
 	
 	velocity = (
 		applied_gravity_vector + \
@@ -121,7 +124,7 @@ func _process_movement(p_delta: float, p_movement_vector: Vector2, p_is_sprintin
 	
 	kinematic_movement(p_delta)
 			
-		
+# This function is called by snapshot interpolation node to provide the actual update
 func network_transform_update(p_origin: Vector3, p_y_rotation: float) -> void:
 	transform.origin = p_origin
 	y_rotation = p_y_rotation

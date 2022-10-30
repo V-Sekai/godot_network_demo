@@ -39,6 +39,7 @@ var interpolated_distance: float = 1.5
 var distance_velocity: float = 0.0
 
 # Bobbing
+@export var minimum_sprint_velocity: float = 3.0
 @export var bobbing_v_amount: float = 0.01
 @export var bobbing_h_amount: float = 0.0
 @export var walk_bobbing_rate: float = 10.0
@@ -54,7 +55,7 @@ func zoom_out():
 	if(distance > distance_max):
 		distance = distance_max
 		
-func update_bobbing(p_velocity_length: float, p_minimum_sprint_velocity: float) -> void:
+func update_bobbing(p_velocity_length: float) -> void:
 	var camera_bobbing_node: Node3D = get_node(
 		camera_bobbing)
 		
@@ -68,7 +69,7 @@ func update_bobbing(p_velocity_length: float, p_minimum_sprint_velocity: float) 
 			camera_bobbing_node.bobbing_h_amount = 0.0
 		
 	if p_velocity_length > 0.0:
-		if p_velocity_length > p_minimum_sprint_velocity:
+		if p_velocity_length > minimum_sprint_velocity:
 			camera_bobbing_node.bobbing_speed = sprint_bobbing_rate * clamp(0.0, 1.0, p_velocity_length)
 		else:
 			camera_bobbing_node.bobbing_speed = walk_bobbing_rate * clamp(0.0, 1.0, p_velocity_length)

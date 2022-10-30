@@ -19,11 +19,24 @@ func get_random_spawn_point() -> Transform3D:
 	var spawn_point_transform: Transform3D = spawn_points[randi_range(0, spawn_points.size()-1)].global_transform
 
 	return spawn_point_transform
+	
+func _update_window_title() -> void:
+	var window: Window = get_viewport()
+	if window:
+		var project_settings_title: String = ProjectSettings.get_setting("application/config/name")
+		
+		var peer: MultiplayerPeer = multiplayer.multiplayer_peer
+		if peer:
+			window.title = project_settings_title + (" (peer_id: %s)" % multiplayer._get_unique_id_string())
+		else:
+			window.title = project_settings_title
 
 func _host_server(p_port: int, p_max_players: int) -> void:
 	var peer: MultiplayerPeer = ENetMultiplayerPeer.new()
 	if peer.create_server(p_port, p_max_players) == OK:
 		multiplayer.multiplayer_peer = peer
+	
+		_update_window_title()
 	
 		var spawn_point_transform: Transform3D = get_random_spawn_point()
 		var _new_player: Node = player_spawner.spawn(player_spawner.get_player_spawn_buffer(1, spawn_point_transform))
@@ -33,15 +46,19 @@ func _host_server(p_port: int, p_max_players: int) -> void:
 func _join_server(p_address: String, p_port: int) -> void:
 	var peer = ENetMultiplayerPeer.new()
 	if peer.create_client(p_address, p_port) == OK:
-		multiplayer.set_multiplayer_peer(peer)
+		multiplayer.multiplayer_peer = peer
 	else:
 		load_main_menu_scene()
 	
 func _on_connected_to_server() -> void:
 	print("_on_connected_to_server")
 	
+	_update_window_title()
+	
 func _on_connection_failed() -> void:
 	print("_on_connection_failed")
+	
+	_update_window_title()
 	load_main_menu_scene()
 
 func _on_peer_connect(p_id : int) -> void:
@@ -80,6 +97,8 @@ func _ready() -> void:
 	randomize()
 	
 	get_tree().set_multiplayer(MultiplayerExtension.new())
+	
+	_update_window_title()
 	
 	player_spawner = player_spawner_const.instantiate()
 	player_spawner.name = "PlayerSpawner"

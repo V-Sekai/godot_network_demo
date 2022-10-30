@@ -5,50 +5,99 @@ const quantization_const = preload("quantization.gd")
 @export_node_path(RigidBody3D) var rigid_body: NodePath = NodePath("..")
 @onready var _rigid_body_node: RigidBody3D = get_node_or_null(rigid_body)
 
-static func encode_physics_state(p_physics_transform: Transform3D) -> PackedByteArray:
-	var buf: PackedByteArray = PackedByteArray()
-	assert(buf.resize(12) == OK)
-		
-	buf.encode_half(0, p_physics_transform.origin.x)
-	buf.encode_half(2, p_physics_transform.origin.y)
-	buf.encode_half(4, p_physics_transform.origin.z)
-	buf.encode_s16(6, quantization_const.quantize_euler_angle_to_s16_angle(p_physics_transform.basis.get_euler().x))
-	buf.encode_s16(8, quantization_const.quantize_euler_angle_to_s16_angle(p_physics_transform.basis.get_euler().y))
-	buf.encode_s16(10, quantization_const.quantize_euler_angle_to_s16_angle(p_physics_transform.basis.get_euler().z))
+class PhysicsState extends RefCounted:
+	const PACKET_LENGTH = 26
 	
-	return buf
+	var origin: Vector3
+	var rotation: Quaternion
+	var linear_velocity: Vector3
+	var angular_velocity: Vector3
 	
-static func decode_physics_state(p_physics_byte_array: PackedByteArray) -> Transform3D:
-	if p_physics_byte_array.size() == 12:
-		var new_transform: Transform3D = Transform3D()
+	static func encode_physics_state(p_physics_state: PhysicsState) -> PackedByteArray:
+		assert(p_physics_state)
 		
-		new_transform.origin.x = p_physics_byte_array.decode_half(0)
-		new_transform.origin.y = p_physics_byte_array.decode_half(2)
-		new_transform.origin.z = p_physics_byte_array.decode_half(4)
+		var buf: PackedByteArray = PackedByteArray()
+		assert(buf.resize(PACKET_LENGTH) == OK)
+			
+		buf.encode_half(0, p_physics_state.origin.x)
+		buf.encode_half(2, p_physics_state.origin.y)
+		buf.encode_half(4, p_physics_state.origin.z)
 		
-		var rotation_euler: Vector3 = Vector3()
-		rotation_euler.x = quantization_const.dequantize_s16_angle_to_euler_angle(p_physics_byte_array.decode_s16(6))
-		rotation_euler.y = quantization_const.dequantize_s16_angle_to_euler_angle(p_physics_byte_array.decode_s16(8))
-		rotation_euler.z = quantization_const.dequantize_s16_angle_to_euler_angle(p_physics_byte_array.decode_s16(10))
+		var quat: Quaternion = p_physics_state.rotation
+		buf.encode_half(6, quat.x)
+		buf.encode_half(8, quat.y)
+		buf.encode_half(10, quat.z)
+		buf.encode_half(12, quat.w)
+		
+		buf.encode_half(14, p_physics_state.linear_velocity.x)
+		buf.encode_half(16, p_physics_state.linear_velocity.y)
+		buf.encode_half(18, p_physics_state.linear_velocity.z)
+		
+		buf.encode_half(20, p_physics_state.angular_velocity.x)
+		buf.encode_half(22, p_physics_state.angular_velocity.y)
+		buf.encode_half(24, p_physics_state.angular_velocity.z)
+		
+		return buf
+		
+	static func decode_physics_state(p_physics_byte_array: PackedByteArray) -> PhysicsState:
+		var new_physics_state: PhysicsState = PhysicsState.new()
+		
+		if p_physics_byte_array.size() == PACKET_LENGTH:
+			var new_origin: Vector3 = Vector3()
+			new_origin.x = p_physics_byte_array.decode_half(0)
+			new_origin.y = p_physics_byte_array.decode_half(2)
+			new_origin.z = p_physics_byte_array.decode_half(4)
+			
+			var new_rotation: Quaternion = Quaternion()
+			new_rotation.x = p_physics_byte_array.decode_half(6)
+			new_rotation.y = p_physics_byte_array.decode_half(8)
+			new_rotation.z = p_physics_byte_array.decode_half(10)
+			new_rotation.w = p_physics_byte_array.decode_half(12)
+			
+			var new_linear_velocity: Vector3 = Vector3()
+			new_linear_velocity.x = p_physics_byte_array.decode_half(14)
+			new_linear_velocity.y = p_physics_byte_array.decode_half(16)
+			new_linear_velocity.z = p_physics_byte_array.decode_half(18)
+			
+			var new_angular_velocity: Vector3 = Vector3()
+			new_angular_velocity.x = p_physics_byte_array.decode_half(20)
+			new_angular_velocity.y = p_physics_byte_array.decode_half(22)
+			new_angular_velocity.z = p_physics_byte_array.decode_half(24)
+			
+			new_physics_state.origin = new_origin
+			new_physics_state.rotation = new_rotation
+			new_physics_state.linear_velocity = new_linear_velocity
+			new_physics_state.angular_velocity = new_angular_velocity
+
+		return new_physics_state
 	
-		new_transform.basis = Basis.from_euler(rotation_euler, Basis.EULER_ORDER_XYZ)
-		
-		return new_transform
-	return Transform3D()
+	func set_from_rigid_body(p_rigid_body: RigidBody3D):
+		origin = p_rigid_body.transform.origin
+		rotation = p_rigid_body.transform.basis.get_rotation_quaternion()
+		linear_velocity = p_rigid_body.linear_velocity
+		angular_velocity = p_rigid_body.angular_velocity
 
 @export var sync_net_state : PackedByteArray:
 	get:
 		if _rigid_body_node:
-			return encode_physics_state(_rigid_body_node.transform)
+			var physics_state: PhysicsState = PhysicsState.new()
+			physics_state.set_from_rigid_body(_rigid_body_node)
+			
+			return PhysicsState.encode_physics_state(physics_state)
 			
 		return PackedByteArray()
 		
 	set(value):
 		if typeof(value) != TYPE_PACKED_BYTE_ARRAY:
 			return
-		if value.size() != 12:
+		if value.size() != PhysicsState.PACKET_LENGTH:
 			return
 		
 		if _rigid_body_node:
 			if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority() and not _rigid_body_node.pending_ownership_request:
-				_rigid_body_node.transform = decode_physics_state(value)
+				var physics_state: PhysicsState = PhysicsState.decode_physics_state(value)
+				
+				_rigid_body_node.transform = Transform3D(Basis(physics_state.rotation), physics_state.origin)
+				_rigid_body_node.linear_velocity = physics_state.linear_velocity
+				_rigid_body_node.angular_velocity = physics_state.angular_velocity
+				

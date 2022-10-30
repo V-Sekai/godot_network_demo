@@ -2,6 +2,9 @@ extends RigidBody3D
 
 const physics_state_sync_const = preload("res://net_demo/core/physics_state_synchronizer.gd")
 
+const AWAKE_STATE_TRANSPARENCY = 0.0
+const SLEEP_STATE_TRANSPARENCY = 0.25
+
 # Index into the color table for multiplayer
 var multiplayer_color_id: int = -1
 
@@ -39,9 +42,9 @@ func _quantize_simulation_locally() -> void:
 # Sleeping rigid bodies will show up as partially transparent
 func _update_sleep_visualization() -> void:
 	if sleeping:
-		$MeshInstance3D.transparency = 0.25
+		$MeshInstance3D.transparency = SLEEP_STATE_TRANSPARENCY
 	else:
-		$MeshInstance3D.transparency = 0.0
+		$MeshInstance3D.transparency = AWAKE_STATE_TRANSPARENCY
 			
 func _on_body_entered(p_body: PhysicsBody3D) -> void:
 	if p_body is CharacterBody3D and p_body.is_multiplayer_authority():

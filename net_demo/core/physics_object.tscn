@@ -36,6 +36,7 @@ continuous_cd = true
 max_contacts_reported = 1
 contact_monitor = true
 script = ExtResource("1_usiqp")
+allow_authority_steal_on_touch = false
 
 [node name="PhysicsStateSynchronizer" type="Node" parent="."]
 script = ExtResource("2_swk7l")

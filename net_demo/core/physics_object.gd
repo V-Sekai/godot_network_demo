@@ -2,6 +2,8 @@ extends RigidBody3D
 
 const physics_state_sync_const = preload("res://net_demo/core/physics_state_synchronizer.gd")
 
+@onready var original_transfrom = transform
+
 # These values control how transparent this object should appear when it is
 # asleep vs when it's awake.
 const AWAKE_STATE_TRANSPARENCY = 0.0
@@ -14,6 +16,7 @@ var multiplayer_color_id: int = -1
 # ignore incoming updates while it is set and instead act like they have control over it.
 # (Currently there is no interface for explicitly requesting ownership, so simulation will
 # not match.)
+@export var allow_authority_steal_on_touch: bool = true
 var pending_authority_request: bool = false
 
 # Updates the material to match the color of the object
@@ -49,18 +52,29 @@ func _update_sleep_visualization() -> void:
 		$MeshInstance3D.transparency = AWAKE_STATE_TRANSPARENCY
 			
 func _on_body_entered(p_body: PhysicsBody3D) -> void:
-	if p_body is CharacterBody3D and p_body.is_multiplayer_authority():
-		if p_body.get_multiplayer_authority() != get_multiplayer_authority():
-			pending_authority_request = true
-			if multiplayer.has_multiplayer_peer():
-				update_color_id_and_material()
+	if allow_authority_steal_on_touch:
+		if p_body is CharacterBody3D and p_body.is_multiplayer_authority():
+			if p_body.get_multiplayer_authority() != get_multiplayer_authority():
+				pending_authority_request = true
+				if multiplayer.has_multiplayer_peer():
+					update_color_id_and_material()
 			
 func _physics_process(_delta: float) -> void:
+	# Sets all the physics objects back to their original transforms
+	if Input.is_action_just_pressed("physics_reset"):
+		if (!multiplayer.has_multiplayer_peer() or is_multiplayer_authority()):
+			transform = original_transfrom
+			
+	# Sets all the physics objects back to their original transforms
+	if Input.is_action_pressed("block_physics_send"):
+		$MultiplayerSynchronizer.public_visibility = false
+	else:
+		$MultiplayerSynchronizer.public_visibility = true
+	
 	_update_sleep_visualization()
 	
 	if (multiplayer.has_multiplayer_peer() and is_multiplayer_authority()) or pending_authority_request:
-		if !sleeping:
-			_quantize_simulation_locally()
+		_quantize_simulation_locally()
 
 func _ready() -> void:
 	assert(MultiplayerColorTable.color_table_updated.connect(update_color_id_and_material) == OK)

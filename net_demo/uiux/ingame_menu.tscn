@@ -27,3 +27,31 @@ offset_top = 19.0
 offset_right = 133.0
 offset_bottom = 45.0
 text = "Peer ID: "
+
+[node name="InfoContainer" type="VBoxContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="Header" type="Label" parent="InfoContainer"]
+offset_right = 189.0
+offset_bottom = 26.0
+text = "Instructions:"
+horizontal_alignment = 2
+
+[node name="PhysicsResetInfo" type="Label" parent="InfoContainer"]
+offset_top = 30.0
+offset_right = 189.0
+offset_bottom = 56.0
+text = "R: Reset Physics"
+horizontal_alignment = 2
+
+[node name="BlockPhysicsUpdatesInfo" type="Label" parent="InfoContainer"]
+offset_top = 60.0
+offset_right = 189.0
+offset_bottom = 86.0
+text = "E: Block Physics Updates"
+horizontal_alignment = 2

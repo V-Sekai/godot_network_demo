@@ -25,12 +25,11 @@ func _spawn_custom(data: Variant) -> Node:
 	if data.size() != (13):
 		return null
 		
-	var spawn_node: Node = get_node(spawn_path)
-		
 	var multiplayer_authority_id: int = data.decode_u32(0)
 		
 	# We should never have a duplicate player controller, but if there is one, something has gone wrong.
-	assert(get_node_or_null("PlayerController_" + str(multiplayer_authority_id)) == null)
+	var spawn_node: Node = get_node(spawn_path)
+	assert(spawn_node.get_node_or_null("PlayerController_" + str(multiplayer_authority_id)) == null)
 		
 	var new_origin: Vector3 = Vector3(data.decode_half(4), data.decode_half(6), data.decode_half(8))
 	var y_rotation: float = quantization_const.dequantize_s16_angle_to_euler_angle(data.decode_s16(10))

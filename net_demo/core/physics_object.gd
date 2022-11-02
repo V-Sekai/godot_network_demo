@@ -19,6 +19,30 @@ var multiplayer_color_id: int = -1
 @export var allow_authority_steal_on_touch: bool = true
 var pending_authority_request: bool = false
 
+# Function resturns if the game is running without a multiplayer peer,
+# if the we have explicit authority over this node, or
+# we are pending explicit authority over
+func has_authority() -> bool:
+	if !multiplayer.has_multiplayer_peer() or is_multiplayer_authority() or pending_authority_request:
+		return true
+	else:
+		return false
+
+func _update_collision() -> void:
+	if has_authority():
+		set_collision_mask_value(2, true)
+		if allow_authority_steal_on_touch:
+			set_collision_mask_value(3, true)
+		else:
+			set_collision_mask_value(3, true)
+	else:
+		if allow_authority_steal_on_touch:
+			set_collision_mask_value(2, true)
+			set_collision_mask_value(3, true)
+		else:
+			set_collision_mask_value(3, false)
+			set_collision_mask_value(3, false)
+
 # Updates the material to match the color of the object
 func update_color_id_and_material() -> void:
 	multiplayer_color_id = MultiplayerColorTable.get_multiplayer_material_index_for_peer_id(
@@ -62,7 +86,7 @@ func _on_body_entered(p_body: PhysicsBody3D) -> void:
 func _physics_process(_delta: float) -> void:
 	# Sets all the physics objects back to their original transforms
 	if Input.is_action_just_pressed("physics_reset"):
-		if (!multiplayer.has_multiplayer_peer() or is_multiplayer_authority()):
+		if has_authority():
 			transform = original_transfrom
 			
 	# Sets all the physics objects back to their original transforms

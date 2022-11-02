@@ -156,8 +156,8 @@ func _ready() -> void:
 		set_collision_layer_value(2, false)
 		set_collision_layer_value(3, true)
 		# Remove game menu for non-authoritive players
-		$IngameMenu.queue_free()
-		$IngameMenu.get_parent().remove_child($IngameMenu)
+		$IngameGUI.queue_free()
+		$IngameGUI.get_parent().remove_child($IngameGUI)
 	else:
 		set_collision_layer_value(2, true)
 		set_collision_layer_value(3, false)
@@ -168,6 +168,6 @@ func _ready() -> void:
 		
 		$CharacterModelHolder.assign_multiplayer_material(color_material)
 		if !multiplayer.has_multiplayer_peer() or is_multiplayer_authority():
-			$IngameMenu.assign_peer_color(color_material.albedo_color)
+			$IngameGUI.assign_peer_color(color_material.albedo_color)
 	
 	$CharacterModelHolder.transform.basis = Basis().rotated(Vector3.UP, y_rotation)

@@ -1,15 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://c18eb3u1xl8n4"]
+[gd_scene load_steps=2 format=3 uid="uid://coycdgq4vb4by"]
 
-[ext_resource type="Script" path="res://net_demo/uiux/ingame_menu.gd" id="1_myiqj"]
+[ext_resource type="Script" path="res://net_demo/uiux/ingame_gui.gd" id="1_20ubr"]
 
-[node name="IngameMenu" type="Control"]
+[node name="IngameGUI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_myiqj")
+script = ExtResource("1_20ubr")
 
 [node name="PeerBoxContainer" type="HBoxContainer" parent="."]
 offset_right = 40.0

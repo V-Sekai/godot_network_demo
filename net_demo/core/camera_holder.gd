@@ -1,5 +1,7 @@
 extends Node3D
 
+var is_controllable: bool = false
+
 const MOUSE_SENSITIVITY: float = 0.001
 var mouse_velocity: Vector2 = Vector2()
 
@@ -106,18 +108,23 @@ func set_y_rotation(p_rotation: float) -> void:
 	get_node(camera_spring_arm).transform.basis = Basis().rotated(Vector3.UP, p_rotation)
 			
 func _input(p_event: InputEvent) -> void:
-	if InputMap.has_action("zoom_in") and p_event.is_action_pressed("zoom_in"):
-		zoom_in()
-	elif InputMap.has_action("zoom_out") and p_event.is_action_pressed("zoom_out"):
-		zoom_out()
-	elif InputMap.has_action("toggle_camera_mode") and p_event.is_action_pressed("toggle_camera_mode"):
-		view_mode = THIRD_PERSON if view_mode == FIRST_PERSON else FIRST_PERSON
-	elif p_event is InputEventMouseMotion:
-		mouse_velocity += p_event.relative
+	if is_controllable and !get_node("/root/GameManager").is_movement_locked():
+		if InputMap.has_action("zoom_in") and p_event.is_action_pressed("zoom_in"):
+			zoom_in()
+		elif InputMap.has_action("zoom_out") and p_event.is_action_pressed("zoom_out"):
+			zoom_out()
+		elif InputMap.has_action("toggle_camera_mode") and p_event.is_action_pressed("toggle_camera_mode"):
+			view_mode = THIRD_PERSON if view_mode == FIRST_PERSON else FIRST_PERSON
+		elif p_event is InputEventMouseMotion:
+			mouse_velocity += p_event.relative
 
 func _ready() -> void:
 	if !multiplayer.has_multiplayer_peer() or is_multiplayer_authority():
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		if !get_node("/root/GameManager").ingame_menu_visible:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		else:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		is_controllable = true
 	else:
 		queue_free()
 

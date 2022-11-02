@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cdlkb6ohd5ceo"]
 
-[ext_resource type="Script" path="res://net_demo/core/physics_object.gd" id="1_usiqp"]
+[ext_resource type="Script" path="res://net_demo/core/physics_object.gd" id="1_3rtga"]
 [ext_resource type="Script" path="res://net_demo/core/physics_state_synchronizer.gd" id="2_swk7l"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_723tu"]
@@ -35,7 +35,7 @@ collision_mask = 11
 continuous_cd = true
 max_contacts_reported = 1
 contact_monitor = true
-script = ExtResource("1_usiqp")
+script = ExtResource("1_3rtga")
 allow_authority_steal_on_touch = false
 
 [node name="PhysicsStateSynchronizer" type="Node" parent="."]

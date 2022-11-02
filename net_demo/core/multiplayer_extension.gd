@@ -4,7 +4,7 @@ class_name MultiplayerExtension
 var base_multiplayer = SceneMultiplayer.new()
 
 func _get_unique_id_string() -> String:
-	if has_multiplayer_peer():
+	if has_multiplayer_peer() and multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 		return str(get_unique_id())
 	else:
 		return "UNASSIGNED"
@@ -19,7 +19,7 @@ func _init():
 	base_multiplayer.connection_failed.connect(func(): cf.emit())
 	base_multiplayer.peer_connected.connect(func(id): pc.emit(id))
 	base_multiplayer.peer_disconnected.connect(func(id): pd.emit(id))
-	base_multiplayer.server_disconnected.connect(func(id): sd.emit(id))
+	base_multiplayer.server_disconnected.connect(func(): sd.emit())
 
 func _rpc(peer: int, object: Object, method: StringName, args: Array) -> int: # Error
 	print(_get_unique_id_string() + ": Got RPC for %d: %s::%s(%s)" % [peer, object, method, args])

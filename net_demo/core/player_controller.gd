@@ -4,7 +4,6 @@ const godot_math_extensions_const = preload("res://addons/math_util/math_funcs.g
 
 const camera_holder_const = preload("camera_holder.gd")
 @export_node_path var camera_holder: NodePath = NodePath()
-@export var use_controls: bool = false
 
 # Settings for controlling movement
 @export var walk_speed: float = 1.5
@@ -135,7 +134,7 @@ func _physics_process(p_delta: float) -> void:
 		var movement_vector: Vector2 = Vector2(
 			Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
 			Input.get_action_strength("move_forwards") - Input.get_action_strength("move_backwards")
-		) if use_controls else Vector2()
+		) if !get_node("/root/GameManager").is_movement_locked() else Vector2()
 		
 		# Calculate the player's rotation
 		_process_rotation(movement_vector)

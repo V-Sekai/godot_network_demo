@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8xb5anoggiov"]
+[gd_scene load_steps=3 format=3 uid="uid://c8xb5anoggiov"]
 
 [ext_resource type="Script" path="res://net_demo/uiux/main_menu.gd" id="1_ollto"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_81xgi"]
+font_size = 72
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -28,55 +31,65 @@ offset_right = 1152.0
 offset_bottom = 648.0
 size_flags_horizontal = 3
 
-[node name="IPLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 offset_right = 1152.0
-offset_bottom = 26.0
+offset_bottom = 102.0
+text = "Multiplayer Demo"
+label_settings = SubResource("LabelSettings_81xgi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IPLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+offset_top = 106.0
+offset_right = 1152.0
+offset_bottom = 132.0
 text = "IP"
 
 [node name="IP" type="LineEdit" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
-offset_top = 30.0
+offset_top = 136.0
 offset_right = 1152.0
-offset_bottom = 61.0
+offset_bottom = 167.0
 theme_override_font_sizes/font_size = 16
 text = "127.0.0.1"
 
 [node name="PortLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
-offset_top = 65.0
+offset_top = 171.0
 offset_right = 1152.0
-offset_bottom = 91.0
+offset_bottom = 197.0
 text = "Port"
 
 [node name="Port" type="SpinBox" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
-offset_top = 95.0
+offset_top = 201.0
 offset_right = 1152.0
-offset_bottom = 126.0
+offset_bottom = 232.0
 min_value = 1.0
 max_value = 9999.0
 value = 7777.0
 
 [node name="MaxPlayersLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
-offset_top = 130.0
+offset_top = 236.0
 offset_right = 1152.0
-offset_bottom = 156.0
+offset_bottom = 262.0
 text = "Max Players"
 
 [node name="MaxPlayers" type="SpinBox" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
-offset_top = 160.0
+offset_top = 266.0
 offset_right = 1152.0
-offset_bottom = 191.0
+offset_bottom = 297.0
 min_value = 1.0
 max_value = 128.0
 value = 32.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
-offset_top = 195.0
+offset_top = 301.0
 offset_right = 1152.0
 offset_bottom = 648.0
 size_flags_vertical = 3
@@ -84,9 +97,9 @@ alignment = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
-offset_top = 422.0
+offset_top = 316.0
 offset_right = 1152.0
-offset_bottom = 453.0
+offset_bottom = 347.0
 
 [node name="HostButton" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2

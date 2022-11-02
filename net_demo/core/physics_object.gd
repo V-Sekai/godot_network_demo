@@ -97,11 +97,11 @@ func _physics_process(_delta: float) -> void:
 	
 	_update_sleep_visualization()
 	
-	if (multiplayer.has_multiplayer_peer() and is_multiplayer_authority()) or pending_authority_request:
+	if (multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED and is_multiplayer_authority()) or pending_authority_request:
 		_quantize_simulation_locally()
 
 func _ready() -> void:
 	assert(MultiplayerColorTable.color_table_updated.connect(update_color_id_and_material) == OK)
 	
-	if multiplayer.has_multiplayer_peer():
+	if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 		update_color_id_and_material()

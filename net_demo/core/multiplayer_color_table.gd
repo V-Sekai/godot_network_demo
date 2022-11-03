@@ -2,57 +2,115 @@ extends Node
 
 signal color_table_updated
 
-var named_color_materials: Array = [] # Fixed size array of valid materials
-var multiplayer_color_table: Dictionary = {}
+const FIXED_COLOR_TABLE_SIZE = 64
 
-# Loads all the default Godot named colors
-func load_named_colors() -> void:
-	named_color_materials = []
-	for i in range(0, Color.get_named_color_count()):
-		var new_color: Color = Color.get_named_color(i)
+var pick_random_color: bool = true
+
+var material_idx_accumulator: int = 0
+
+var multiplayer_materials: Array = [] # Fixed size array of valid materials
+var multiplayer_peer_to_material_idx_table: Dictionary = {}
+
+static func get_color(p_x: float) -> Color:
+	var r: float = 0.0
+	var g: float = 0.0
+	var b: float = 1.0
+	if (p_x >= 0.0 and p_x < 0.2):
+		p_x = p_x / 0.2
+		r = 0.0
+		g = p_x
+		b = 1.0
+	elif (p_x >= 0.2 and p_x < 0.4):
+		p_x = (p_x - 0.2) / 0.2
+		r = 0.0
+		g = 1.0
+		b = 1.0 - p_x
+	elif (p_x >= 0.4 and p_x < 0.6):
+		p_x = (p_x - 0.4) / 0.2
+		r = p_x
+		g = 1.0
+		b = 0.0
+	elif (p_x >= 0.6 and p_x < 0.8):
+		p_x = (p_x - 0.6) / 0.2
+		r = 1.0
+		g = 1.0 - p_x
+		b = 0.0
+	elif (p_x >= 0.8 and p_x <= 1.0):
+		p_x = (p_x - 0.8) / 0.2
+		r = 1.0
+		g = 0.0
+		b = p_x
+	return Color(r, g, b);
+
+static func get_list_of_colors(p_count: int) -> PackedColorArray:
+	var colors: PackedColorArray
+	if (p_count < 2):
+		return PackedColorArray([Color(0.0, 0.0, 1.0)])
+	var dx: float = 1.0 / float(p_count - 1)
+	for i in range(0, p_count + 1):
+		colors.push_back(get_color(i * dx))
+		
+	return colors
+	
+# Loads all the multiplayer materials corresponding to the color table
+func load_multiplayer_materials(p_color_table: PackedColorArray) -> void:
+	multiplayer_materials = []
+	
+	for i in range(0, p_color_table.size()):
+		var new_color: Color = p_color_table[i]
 		var new_material: StandardMaterial3D = StandardMaterial3D.new()
 		new_material.albedo_color = new_color
-		named_color_materials.push_back(new_material)
+		multiplayer_materials.push_back(new_material)
 
 # Returns the material for an index id
 func get_material_for_index(p_index: int) -> Material:
 	assert(p_index >= 0)
-	assert(p_index < named_color_materials.size())
+	assert(p_index < multiplayer_materials.size())
 	
-	return named_color_materials[p_index]
+	return multiplayer_materials[p_index]
 
-func assign_multiplayer_color_table_entry(p_peer_id: int, p_color_id: int) -> void:
-	multiplayer_color_table[p_peer_id] = p_color_id
+func assign_multiplayer_peer_to_material_id_table_entry(p_peer_id: int, p_material_id: int) -> void:
+	multiplayer_peer_to_material_idx_table[p_peer_id] = p_material_id
 	color_table_updated.emit()
 
 # Clears the entire multiplayer color table
 func clear_multiplayer_color_table() -> void:
-	multiplayer_color_table.clear()
+	multiplayer_peer_to_material_idx_table.clear()
+	material_idx_accumulator = 0
 
 # Removes a peer id from the color table
 func erase_multiplayer_peer_id(p_peer_id: int) -> void:
-	var _erase_result: bool = multiplayer_color_table.erase(p_peer_id)
+	var _erase_result: bool = multiplayer_peer_to_material_idx_table.erase(p_peer_id)
 
 # Get the material index for a specific peer id. If one does not yet
 # exist, a new one is added at random
 func get_multiplayer_material_index_for_peer_id(p_peer_id: int, p_assign_if_missing: bool) -> int:
-	var color_id: int = multiplayer_color_table.get(p_peer_id, -1)
-	if color_id >= 0:
-		return color_id
+	var material_id: int = multiplayer_peer_to_material_idx_table.get(p_peer_id, -1)
+	if material_id >= 0:
+		return material_id
 	elif p_assign_if_missing:
-		var valid_named_color_material: Array = named_color_materials
-		for val in multiplayer_color_table.values():
-			valid_named_color_material.erase(val)
+		var valid_multiplayer_material: Array = multiplayer_materials
+		for val in multiplayer_peer_to_material_idx_table.values():
+			valid_multiplayer_material.erase(val)
 			
-		if valid_named_color_material.size() > 0:
-			color_id = randi_range(0, valid_named_color_material.size()-1)
-			assign_multiplayer_color_table_entry(p_peer_id, color_id)
+		if valid_multiplayer_material.size() > 0:
+			if pick_random_color:
+				material_id = randi_range(0, valid_multiplayer_material.size()-1)
+			else:
+				material_id = material_idx_accumulator
+				
+			assign_multiplayer_peer_to_material_id_table_entry(p_peer_id, material_id)
 			
-			return color_id
+			material_idx_accumulator += 1
+			if material_idx_accumulator >= valid_multiplayer_material.size():
+				material_idx_accumulator = 0
+			
+			return material_id
 		else:
 			return -1
 			
 	return -1
 			
-func _ready() -> void:
-	load_named_colors()
+func reset_colors():
+	clear_multiplayer_color_table()
+	load_multiplayer_materials(get_list_of_colors(FIXED_COLOR_TABLE_SIZE))

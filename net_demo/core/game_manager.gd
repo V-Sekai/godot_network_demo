@@ -86,7 +86,9 @@ func _on_server_disconnected() -> void:
 	load_main_menu_scene()
 		
 func host_server(p_port: int, p_max_players: int) -> void:
-	assert(p_max_players < MultiplayerColorTable.named_color_materials.size())
+	MultiplayerColorTable.reset_colors()
+	
+	assert(p_max_players < MultiplayerColorTable.multiplayer_materials.size())
 	
 	var peer: MultiplayerPeer = ENetMultiplayerPeer.new()
 	if peer.create_server(p_port, p_max_players) == OK:
@@ -99,6 +101,8 @@ func host_server(p_port: int, p_max_players: int) -> void:
 		load_main_menu_scene()
 	
 func join_server(p_address: String, p_port: int) -> void:
+	MultiplayerColorTable.reset_colors()
+	
 	var peer = ENetMultiplayerPeer.new()
 	if peer.create_client(p_address, p_port) == OK:
 		multiplayer.multiplayer_peer = peer

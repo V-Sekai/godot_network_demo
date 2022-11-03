@@ -39,7 +39,7 @@ func _spawn_custom(data: Variant) -> Node:
 	new_player_scene.y_rotation = y_rotation
 	
 	var multiplayer_color_id: int = data.decode_u8(12)
-	MultiplayerColorTable.assign_multiplayer_color_table_entry(multiplayer_authority_id, multiplayer_color_id)
+	MultiplayerColorTable.assign_multiplayer_peer_to_material_id_table_entry(multiplayer_authority_id, multiplayer_color_id)
 	
 	new_player_scene.multiplayer_color_id = multiplayer_color_id
 	new_player_scene.set_multiplayer_authority(multiplayer_authority_id)

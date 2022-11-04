@@ -79,9 +79,11 @@ func _on_body_entered(p_body: PhysicsBody3D) -> void:
 	if allow_authority_steal_on_touch:
 		if p_body is CharacterBody3D and p_body.is_multiplayer_authority():
 			if p_body.get_multiplayer_authority() != get_multiplayer_authority():
-				pending_authority_request = true
-				if multiplayer.has_multiplayer_peer():
-					update_color_id_and_material()
+				if !pending_authority_request:
+					pending_authority_request = true
+					if multiplayer.has_multiplayer_peer():
+						update_color_id_and_material()
+					$MultiplayerSynchronizer.rpc_id(1, "claim_authority")
 			
 func _physics_process(_delta: float) -> void:
 	# Sets all the physics objects back to their original transforms

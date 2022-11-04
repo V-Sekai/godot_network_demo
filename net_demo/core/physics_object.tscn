@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cdlkb6ohd5ceo"]
+[gd_scene load_steps=7 format=3 uid="uid://cdlkb6ohd5ceo"]
 
 [ext_resource type="Script" path="res://net_demo/core/physics_object.gd" id="1_3rtga"]
 [ext_resource type="Script" path="res://net_demo/core/physics_state_synchronizer.gd" id="2_swk7l"]
+[ext_resource type="Script" path="res://net_demo/core/physics_object_multiplayer_synchronizer.gd" id="3_6j57q"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_723tu"]
 size = Vector3(0.25, 0.25, 0.25)
@@ -36,7 +37,6 @@ continuous_cd = true
 max_contacts_reported = 1
 contact_monitor = true
 script = ExtResource("1_3rtga")
-allow_authority_steal_on_touch = false
 
 [node name="PhysicsStateSynchronizer" type="Node" parent="."]
 script = ExtResource("2_swk7l")
@@ -51,5 +51,6 @@ shape = SubResource("BoxShape3D_dmqq1")
 replication_interval = 0.1
 replication_config = SubResource("SceneReplicationConfig_pwbj6")
 visibility_update_mode = 1
+script = ExtResource("3_6j57q")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

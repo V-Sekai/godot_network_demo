@@ -52,7 +52,7 @@ func _get_peer_ids() -> PackedInt32Array:
 	return base_multiplayer.get_peers()
 	
 func _get_remote_sender_id() -> int:
-	return base_multiplayer._get_remote_sender_id()
+	return base_multiplayer.get_remote_sender_id()
 	
 func _poll() -> int:
 	return base_multiplayer.poll()

@@ -3,6 +3,7 @@ extends Node
 signal color_table_updated
 
 const FIXED_COLOR_TABLE_SIZE = 64
+const color_functions_const = preload("color_functions.gd")
 
 var pick_random_color: bool = true
 
@@ -10,47 +11,6 @@ var material_idx_accumulator: int = 0
 
 var multiplayer_materials: Array = [] # Fixed size array of valid materials
 var multiplayer_peer_to_material_idx_table: Dictionary = {}
-
-static func get_color(p_x: float) -> Color:
-	var r: float = 0.0
-	var g: float = 0.0
-	var b: float = 1.0
-	if (p_x >= 0.0 and p_x < 0.2):
-		p_x = p_x / 0.2
-		r = 0.0
-		g = p_x
-		b = 1.0
-	elif (p_x >= 0.2 and p_x < 0.4):
-		p_x = (p_x - 0.2) / 0.2
-		r = 0.0
-		g = 1.0
-		b = 1.0 - p_x
-	elif (p_x >= 0.4 and p_x < 0.6):
-		p_x = (p_x - 0.4) / 0.2
-		r = p_x
-		g = 1.0
-		b = 0.0
-	elif (p_x >= 0.6 and p_x < 0.8):
-		p_x = (p_x - 0.6) / 0.2
-		r = 1.0
-		g = 1.0 - p_x
-		b = 0.0
-	elif (p_x >= 0.8 and p_x <= 1.0):
-		p_x = (p_x - 0.8) / 0.2
-		r = 1.0
-		g = 0.0
-		b = p_x
-	return Color(r, g, b);
-
-static func get_list_of_colors(p_count: int) -> PackedColorArray:
-	var colors: PackedColorArray
-	if (p_count < 2):
-		return PackedColorArray([Color(0.0, 0.0, 1.0)])
-	var dx: float = 1.0 / float(p_count - 1)
-	for i in range(0, p_count + 1):
-		colors.push_back(get_color(i * dx))
-		
-	return colors
 	
 # Loads all the multiplayer materials corresponding to the color table
 func load_multiplayer_materials(p_color_table: PackedColorArray) -> void:
@@ -113,4 +73,4 @@ func get_multiplayer_material_index_for_peer_id(p_peer_id: int, p_assign_if_miss
 			
 func reset_colors():
 	clear_multiplayer_color_table()
-	load_multiplayer_materials(get_list_of_colors(FIXED_COLOR_TABLE_SIZE))
+	load_multiplayer_materials(color_functions_const.get_list_of_colors(FIXED_COLOR_TABLE_SIZE))

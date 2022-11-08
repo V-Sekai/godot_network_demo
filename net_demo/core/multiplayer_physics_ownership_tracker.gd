@@ -15,5 +15,5 @@ func flush_authority_requests() -> void:
 		
 	queued_authority_request.clear()
 
-func _physics_process(delta):
+func _physics_process(_delta: float) -> void:
 	flush_authority_requests()

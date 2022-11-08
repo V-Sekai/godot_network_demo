@@ -83,7 +83,7 @@ func _on_body_entered(p_body: PhysicsBody3D) -> void:
 					pending_authority_request = true
 					if multiplayer.has_multiplayer_peer():
 						update_color_id_and_material()
-					$MultiplayerSynchronizer.rpc_id(1, "claim_authority")
+					assert($MultiplayerSynchronizer.rpc_id(1, "claim_authority") == OK)
 			
 func _physics_process(_delta: float) -> void:
 	# Sets all the physics objects back to their original transforms

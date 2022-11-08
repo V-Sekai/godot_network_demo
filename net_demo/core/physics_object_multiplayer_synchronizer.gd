@@ -4,13 +4,13 @@ extends MultiplayerSynchronizer
 @rpc(any_peer, call_local)
 func claim_authority() -> void:
 	var sender_id: int = multiplayer.get_remote_sender_id()
-	if multiplayer.get_unique_id() == 1:
+	if GameManager.is_session_authority(multiplayer.get_unique_id()):
 		MultiplayerPhysicsOwnershipTracker.request_authority(self, sender_id)
 	
 @rpc(any_peer, call_local)
 func assign_authority(p_peer_id: int):
 	var sender_id: int = multiplayer.get_remote_sender_id()
-	if sender_id == 1:
+	if GameManager.is_session_authority(sender_id):
 		var physics_body = get_node(root_path)
 		physics_body.set_multiplayer_authority(p_peer_id)
 		physics_body.pending_authority_request = false

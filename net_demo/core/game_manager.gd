@@ -20,6 +20,12 @@ func is_movement_locked() -> bool:
 	else:
 		return false
 
+func is_session_authority(p_peer_id: int) -> bool:
+	if p_peer_id == 1:
+		return true
+		
+	return false
+
 func load_main_menu_scene() -> void:
 	assert(get_tree().change_scene_to_file("res://net_demo/uiux/main_menu.tscn") == OK)
 	ingame_menu_visible = false

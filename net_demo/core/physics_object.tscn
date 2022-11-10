@@ -23,12 +23,9 @@ properties/2/sync = false
 properties/3/path = NodePath(".:angular_velocity")
 properties/3/spawn = true
 properties/3/sync = false
-properties/4/path = NodePath(".:authority")
-properties/4/spawn = true
-properties/4/sync = false
-properties/5/path = NodePath("PhysicsStateSynchronizer:sync_net_state")
-properties/5/spawn = false
-properties/5/sync = true
+properties/4/path = NodePath("PhysicsStateSynchronizer:sync_net_state")
+properties/4/spawn = false
+properties/4/sync = true
 
 [node name="physics_object" type="RigidBody3D"]
 collision_layer = 8

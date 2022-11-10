@@ -44,4 +44,6 @@ func _spawn_custom(data: Variant) -> Node:
 	new_player_scene.multiplayer_color_id = multiplayer_color_id
 	new_player_scene.set_multiplayer_authority(multiplayer_authority_id)
 	
+	get_node("/root/GameManager/").add_player_to_list(multiplayer_authority_id)
+	
 	return new_player_scene

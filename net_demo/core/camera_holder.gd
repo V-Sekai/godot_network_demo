@@ -104,6 +104,26 @@ func _update_distance(p_delta: float) -> void:
 		FIRST_PERSON:
 			get_node(camera_spring_arm).spring_length = 0.0
 			
+func _update_transform() -> void:
+	var camera_spring_arm_node: SpringArm3D = get_node(camera_spring_arm)
+	var camera_pivot_node: Node3D = get_node(camera_pivot)
+	
+	match view_mode:
+		THIRD_PERSON:
+			camera_pivot_node.transform.origin = Vector3(0.0, camera_height_first_person, 0.0)
+			camera_spring_arm_node.collision_mask = collision_mask
+			
+			camera_spring_arm_node.rotation.x = clamp(
+				camera_spring_arm_node.rotation.x, deg_to_rad(pitch_min_limit), deg_to_rad(pitch_max_limit))
+		FIRST_PERSON:
+			camera_pivot_node.transform.origin = Vector3(0.0, camera_height_third_person, 0.0)
+			camera_spring_arm_node.collision_mask = 0
+			
+			camera_spring_arm_node.rotation.x = clamp(
+				camera_spring_arm_node.rotation.x, deg_to_rad(-90), deg_to_rad(90))
+	
+	_update_model_visibility(view_mode)
+			
 func set_y_rotation(p_rotation: float) -> void:
 	get_node(camera_spring_arm).transform.basis = Basis().rotated(Vector3.UP, p_rotation)
 			
@@ -135,21 +155,7 @@ func _physics_process(p_delta: float) -> void:
 	camera_pivot_node.rotate_y(-mouse_velocity.x * MOUSE_SENSITIVITY)
 	camera_spring_arm_node.rotate_x(-mouse_velocity.y * MOUSE_SENSITIVITY)
 	
-	match view_mode:
-		THIRD_PERSON:
-			camera_pivot_node.transform.origin = Vector3(0.0, camera_height_first_person, 0.0)
-			camera_spring_arm_node.collision_mask = collision_mask
-			
-			camera_spring_arm_node.rotation.x = clamp(
-				camera_spring_arm_node.rotation.x, deg_to_rad(pitch_min_limit), deg_to_rad(pitch_max_limit))
-		FIRST_PERSON:
-			camera_pivot_node.transform.origin = Vector3(0.0, camera_height_third_person, 0.0)
-			camera_spring_arm_node.collision_mask = 0
-			
-			camera_spring_arm_node.rotation.x = clamp(
-				camera_spring_arm_node.rotation.x, deg_to_rad(-90), deg_to_rad(90))
-	
+	_update_transform()
 	mouse_velocity = Vector2(0.0, 0.0)
-	
+
 	_update_distance(p_delta)
-	_update_model_visibility(view_mode)

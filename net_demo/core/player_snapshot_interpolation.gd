@@ -80,5 +80,8 @@ func _sync_values() -> void:
 				_sync_values()
 			
 func _ready() -> void:
+	target_player_snapshot.origin = _player_controller_node.transform.origin
+	target_player_snapshot.y_rotation = _player_controller_node.y_rotation
+	
 	if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED and !is_multiplayer_authority() and _player_controller_node:
 		_sync_values()

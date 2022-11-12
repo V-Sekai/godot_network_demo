@@ -13,3 +13,9 @@ func _physics_process(p_delta: float) -> void:
 		waveslice * bobbing_h_amount,
 		waveslice * bobbing_v_amount,
 		0.0)
+
+func _ready() -> void:
+	transform.origin = Vector3(
+		0.0,
+		0.0,
+		0.0)

@@ -9,12 +9,30 @@
 config_version=5
 
 _global_script_classes=[{
+"base": "RefCounted",
+"class": &"GutHookScript",
+"language": &"GDScript",
+"path": "res://addons/gut/hook_script.gd"
+}, {
+"base": "RefCounted",
+"class": &"GutStringUtils",
+"language": &"GDScript",
+"path": "res://addons/gut/strutils.gd"
+}, {
+"base": "Node",
+"class": &"GutTest",
+"language": &"GDScript",
+"path": "res://addons/gut/test.gd"
+}, {
 "base": "MultiplayerAPIExtension",
 "class": &"MultiplayerExtension",
 "language": &"GDScript",
 "path": "res://net_demo/core/multiplayer_extension.gd"
 }]
 _global_script_class_icons={
+"GutHookScript": "",
+"GutStringUtils": "",
+"GutTest": "",
 "MultiplayerExtension": ""
 }
 

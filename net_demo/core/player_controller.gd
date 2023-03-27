@@ -3,7 +3,7 @@ extends "movement_controller.gd"
 const godot_math_extensions_const = preload("res://addons/math_util/math_funcs.gd")
 
 const camera_holder_const = preload("camera_holder.gd")
-@export_node_path var camera_holder: NodePath = NodePath()
+@export var camera_holder: Node3D = null
 
 # Settings for controlling movement
 @export var walk_speed: float = 1.5
@@ -22,19 +22,17 @@ var last_rotation : PackedFloat64Array = [0, 0]
 
 # Updates the purely visual camera bobbing effect for first-person mode
 func _update_bobbing(p_velocity_length: float) -> void:
-	var camera_holder_node: Node3D = get_node_or_null(camera_holder)
-	if camera_holder_node:
-		camera_holder_node.update_bobbing(p_velocity_length)
+	if camera_holder:
+		camera_holder.update_bobbing(p_velocity_length)
 
 # Calculates the correct rotation for a movement vector relative to the 
 # camera.
 func _process_rotation(p_movement_vector: Vector2) -> void:
-	var camera_holder_node: Node3D = get_node_or_null(camera_holder)
-	if !camera_holder_node:
+	if !camera_holder:
 			return
 	
 	var direction_vector: Vector2 = Vector2()
-	if camera_holder_node.view_mode == camera_holder_const.FIRST_PERSON:
+	if camera_holder.view_mode == camera_holder_const.FIRST_PERSON:
 		direction_vector = Vector2(0.0, 1.0)
 	else:
 		direction_vector = p_movement_vector
@@ -42,8 +40,7 @@ func _process_rotation(p_movement_vector: Vector2) -> void:
 	var direction_distance: float = direction_vector.normalized().length()
 	
 	if direction_distance > 0.0:
-		var camera_pivot_node: Node3D = camera_holder_node.get_node_or_null(
-			camera_holder_node.camera_pivot)
+		var camera_pivot_node: Node3D = camera_holder.camera_pivot
 		if !camera_pivot_node:
 			return
 			
@@ -88,14 +85,13 @@ func _process_movement(p_delta: float, p_movement_vector: Vector2, p_is_sprintin
 	
 	var is_moving: bool = movement_length > 0.0
 	
-	var camera_holder_node: Node3D = get_node_or_null(camera_holder)
-	if !camera_holder_node:
+	if !camera_holder:
 			return
 			
-	var camera_pivot_node: Node3D = camera_holder_node.get_node(camera_holder_node.camera_pivot)
+	var camera_pivot_node: Node3D = camera_holder.camera_pivot
 	
 	var target_velocity: Vector3
-	if camera_holder_node.view_mode == camera_holder_const.FIRST_PERSON:
+	if camera_holder.view_mode == camera_holder_const.FIRST_PERSON:
 		target_velocity = ((camera_pivot_node.global_transform.basis.x * p_movement_vector.x)
 		+ (camera_pivot_node.global_transform.basis.z * -p_movement_vector.y)) * speed_modifier
 	else:

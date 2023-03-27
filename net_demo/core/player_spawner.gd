@@ -47,3 +47,6 @@ func _spawn_custom(data: Variant) -> Node:
 	get_node("/root/GameManager/").add_player_to_list(multiplayer_authority_id)
 	
 	return new_player_scene
+	
+func _ready():
+	set_spawn_function(Callable(_spawn_custom))

@@ -3,8 +3,7 @@ extends Node
 const quantization_const = preload("quantization.gd")
 
 # Path to the player node
-@export_node_path(CharacterBody3D) var player_controller: NodePath = NodePath()
-@onready var _player_controller_node: CharacterBody3D = get_node_or_null(player_controller)
+@export var player_controller: CharacterBody3D = null
 
 # Current snapshot to sync to the actual player node
 var target_player_snapshot: PlayerSnapshot = PlayerSnapshot.new()
@@ -50,7 +49,7 @@ class PlayerSnapshot extends RefCounted:
 		
 # Syncs snapshot to actual player node
 func _sync_values() -> void:
-	_player_controller_node.network_transform_update(target_player_snapshot.origin, target_player_snapshot.y_rotation)
+	player_controller.network_transform_update(target_player_snapshot.origin, target_player_snapshot.y_rotation)
 	
 # This value encodes/decodes and quantizes the player's origin and y rotation
 # when accessed.
@@ -58,10 +57,10 @@ func _sync_values() -> void:
 	get:
 		var buf: PackedByteArray = PackedByteArray()
 		
-		if _player_controller_node:
+		if player_controller:
 			var new_player_snapshot: PlayerSnapshot = PlayerSnapshot.new()
-			new_player_snapshot.origin = _player_controller_node.transform.origin
-			new_player_snapshot.y_rotation = _player_controller_node.y_rotation
+			new_player_snapshot.origin = player_controller.transform.origin
+			new_player_snapshot.y_rotation = player_controller.y_rotation
 			
 			buf = PlayerSnapshot.encode_player_snapshot(new_player_snapshot)
 				
@@ -76,12 +75,12 @@ func _sync_values() -> void:
 		if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
 			target_player_snapshot = PlayerSnapshot.decode_player_snapshot(value)
 			
-			if _player_controller_node:
+			if player_controller:
 				_sync_values()
 			
 func _ready() -> void:
-	target_player_snapshot.origin = _player_controller_node.transform.origin
-	target_player_snapshot.y_rotation = _player_controller_node.y_rotation
+	target_player_snapshot.origin = player_controller.transform.origin
+	target_player_snapshot.y_rotation = player_controller.y_rotation
 	
-	if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED and !is_multiplayer_authority() and _player_controller_node:
+	if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED and !is_multiplayer_authority() and player_controller:
 		_sync_values()

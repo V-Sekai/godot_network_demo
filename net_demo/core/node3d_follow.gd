@@ -1,6 +1,6 @@
 extends Node3D
 
-@export_node_path(Node3D) var target = NodePath()
+@export var target: Node3D = null
 
 func _get_target_node() -> Node3D:
-	return get_node(target)
+	return target

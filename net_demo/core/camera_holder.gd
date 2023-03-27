@@ -10,10 +10,10 @@ enum {
 	THIRD_PERSON
 }
 
-@export_node_path(Node3D) var camera_pivot: NodePath = NodePath()
-@export_node_path(SpringArm3D) var camera_spring_arm: NodePath = NodePath()
-@export_node_path(Node3D) var camera_bobbing: NodePath = NodePath()
-@export_node_path(Node3D) var third_person_model: NodePath = NodePath()
+@export var camera_pivot: Node3D = null
+@export var camera_spring_arm: SpringArm3D = null
+@export var camera_bobbing: Node3D = null
+@export var third_person_model: Node3D = null
 
 @export_enum("First-Person", "Third-Person") var view_mode: int = THIRD_PERSON:
 	set(p_view_mode):
@@ -58,35 +58,40 @@ func zoom_out():
 		distance = distance_max
 		
 func update_bobbing(p_velocity_length: float) -> void:
-	var camera_bobbing_node: Node3D = get_node(
-		camera_bobbing)
-		
+	if !camera_bobbing:
+		return
+	
 	# Only apply bobbing when in first-person mode
 	match view_mode:
 		FIRST_PERSON:
-			camera_bobbing_node.bobbing_v_amount = bobbing_v_amount * p_velocity_length
-			camera_bobbing_node.bobbing_h_amount = bobbing_h_amount * p_velocity_length
+			camera_bobbing.bobbing_v_amount = bobbing_v_amount * p_velocity_length
+			camera_bobbing.bobbing_h_amount = bobbing_h_amount * p_velocity_length
 		THIRD_PERSON:
-			camera_bobbing_node.bobbing_v_amount = 0.0
-			camera_bobbing_node.bobbing_h_amount = 0.0
+			camera_bobbing.bobbing_v_amount = 0.0
+			camera_bobbing.bobbing_h_amount = 0.0
 		
 	if p_velocity_length > 0.0:
 		if p_velocity_length > minimum_sprint_velocity:
-			camera_bobbing_node.bobbing_speed = sprint_bobbing_rate * clamp(0.0, 1.0, p_velocity_length)
+			camera_bobbing.bobbing_speed = sprint_bobbing_rate * clamp(0.0, 1.0, p_velocity_length)
 		else:
-			camera_bobbing_node.bobbing_speed = walk_bobbing_rate * clamp(0.0, 1.0, p_velocity_length)
+			camera_bobbing.bobbing_speed = walk_bobbing_rate * clamp(0.0, 1.0, p_velocity_length)
 	else:
-		camera_bobbing_node.step_timer = 0.0
+		camera_bobbing.step_timer = 0.0
 		
 func _update_model_visibility(p_view_mode: int) -> void:
-	var third_person_model_node: Node3D = get_node(third_person_model)
+	if !third_person_model:
+		return
+	
 	match p_view_mode:
 		FIRST_PERSON:
-			third_person_model_node.hide()
+			third_person_model.hide()
 		THIRD_PERSON:
-			third_person_model_node.show()
+			third_person_model.show()
 		
 func _update_distance(p_delta: float) -> void:
+	if !camera_spring_arm:
+		return
+	
 	var distance_result: Dictionary = get_node("/root/GodotMathExtension").smooth_damp_scaler(
 		interpolated_distance,
 		distance,
@@ -100,32 +105,32 @@ func _update_distance(p_delta: float) -> void:
 	
 	match view_mode:
 		THIRD_PERSON:
-			get_node(camera_spring_arm).spring_length = interpolated_distance
+			camera_spring_arm.spring_length = interpolated_distance
 		FIRST_PERSON:
-			get_node(camera_spring_arm).spring_length = 0.0
+			camera_spring_arm.spring_length = 0.0
 			
 func _update_transform() -> void:
-	var camera_spring_arm_node: SpringArm3D = get_node(camera_spring_arm)
-	var camera_pivot_node: Node3D = get_node(camera_pivot)
-	
+	if !camera_spring_arm or !camera_pivot:
+		return
+
 	match view_mode:
 		THIRD_PERSON:
-			camera_pivot_node.transform.origin = Vector3(0.0, camera_height_first_person, 0.0)
-			camera_spring_arm_node.collision_mask = collision_mask
+			camera_pivot.transform.origin = Vector3(0.0, camera_height_first_person, 0.0)
+			camera_spring_arm.collision_mask = collision_mask
 			
-			camera_spring_arm_node.rotation.x = clamp(
-				camera_spring_arm_node.rotation.x, deg_to_rad(pitch_min_limit), deg_to_rad(pitch_max_limit))
+			camera_spring_arm.rotation.x = clamp(
+				camera_spring_arm.rotation.x, deg_to_rad(pitch_min_limit), deg_to_rad(pitch_max_limit))
 		FIRST_PERSON:
-			camera_pivot_node.transform.origin = Vector3(0.0, camera_height_third_person, 0.0)
-			camera_spring_arm_node.collision_mask = 0
+			camera_pivot.transform.origin = Vector3(0.0, camera_height_third_person, 0.0)
+			camera_spring_arm.collision_mask = 0
 			
-			camera_spring_arm_node.rotation.x = clamp(
-				camera_spring_arm_node.rotation.x, deg_to_rad(-90), deg_to_rad(90))
+			camera_spring_arm.rotation.x = clamp(
+				camera_spring_arm.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 	
 	_update_model_visibility(view_mode)
 			
 func set_y_rotation(p_rotation: float) -> void:
-	get_node(camera_spring_arm).transform.basis = Basis().rotated(Vector3.UP, p_rotation)
+	camera_spring_arm.transform.basis = Basis().rotated(Vector3.UP, p_rotation)
 			
 func _input(p_event: InputEvent) -> void:
 	if is_controllable and !get_node("/root/GameManager").is_movement_locked():
@@ -149,11 +154,11 @@ func _ready() -> void:
 		queue_free()
 
 func _physics_process(p_delta: float) -> void:
-	var camera_spring_arm_node: SpringArm3D = get_node(camera_spring_arm)
-	var camera_pivot_node: Node3D = get_node(camera_pivot)
+	if !camera_spring_arm or !camera_pivot:
+		return
 	
-	camera_pivot_node.rotate_y(-mouse_velocity.x * MOUSE_SENSITIVITY)
-	camera_spring_arm_node.rotate_x(-mouse_velocity.y * MOUSE_SENSITIVITY)
+	camera_pivot.rotate_y(-mouse_velocity.x * MOUSE_SENSITIVITY)
+	camera_spring_arm.rotate_x(-mouse_velocity.y * MOUSE_SENSITIVITY)
 	
 	_update_transform()
 	mouse_velocity = Vector2(0.0, 0.0)

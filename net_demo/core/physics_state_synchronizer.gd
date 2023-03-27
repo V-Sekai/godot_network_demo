@@ -2,8 +2,7 @@ extends Node
 
 const quantization_const = preload("quantization.gd")
 
-@export_node_path(RigidBody3D) var rigid_body: NodePath = NodePath("..")
-@onready var _rigid_body_node: RigidBody3D = get_node_or_null(rigid_body)
+@export var rigid_body: RigidBody3D = null
 
 # This is intended to implement state synchronisation for physics objects
 # in the sense that they all simulate locally, and frequently snap to 
@@ -105,9 +104,9 @@ class PhysicsState extends RefCounted:
 
 @export var sync_net_state : PackedByteArray:
 	get:
-		if _rigid_body_node:
+		if rigid_body:
 			var physics_state: PhysicsState = PhysicsState.new()
-			physics_state.set_from_rigid_body(_rigid_body_node)
+			physics_state.set_from_rigid_body(rigid_body)
 			
 			return PhysicsState.encode_physics_state(physics_state)
 			
@@ -119,12 +118,12 @@ class PhysicsState extends RefCounted:
 		if value.size() < PhysicsState.SLEEP_PACKET_LENGTH:
 			return
 		
-		if _rigid_body_node:
-			if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority() and not _rigid_body_node.pending_authority_request:
+		if rigid_body:
+			if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority() and not rigid_body.pending_authority_request:
 				var physics_state: PhysicsState = PhysicsState.decode_physics_state(value)
 				
-				_rigid_body_node.transform = Transform3D(Basis(physics_state.rotation), physics_state.origin)
-				_rigid_body_node.linear_velocity = physics_state.linear_velocity
-				_rigid_body_node.angular_velocity = physics_state.angular_velocity
-				_rigid_body_node.sleeping = physics_state.sleeping
+				rigid_body.transform = Transform3D(Basis(physics_state.rotation), physics_state.origin)
+				rigid_body.linear_velocity = physics_state.linear_velocity
+				rigid_body.angular_velocity = physics_state.angular_velocity
+				rigid_body.sleeping = physics_state.sleeping
 				

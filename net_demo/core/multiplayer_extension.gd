@@ -21,18 +21,18 @@ func _init():
 	base_multiplayer.peer_disconnected.connect(func(id): pd.emit(id))
 	base_multiplayer.server_disconnected.connect(func(): sd.emit())
 
-func _rpc(peer: int, object: Object, method: StringName, args: Array) -> int: # Error
+func _rpc(peer: int, object: Object, method: StringName, args: Array) -> Error: # Error
 	print(_get_unique_id_string() + ": Got RPC for %d: %s::%s(%s)" % [peer, object, method, args])
 	return base_multiplayer.rpc(peer, object, method, args)
 
-func _object_configuration_add(object, config: Variant) -> int:
+func _object_configuration_add(object, config: Variant) -> Error:
 	if config is MultiplayerSynchronizer:
 		print(_get_unique_id_string() + ": Adding synchronization configuration for %s. Synchronizer: %s" % [object, config])
 	elif config is MultiplayerSpawner:
 		print(_get_unique_id_string() + ": Adding node %s to the spawn list. Spawner: %s" % [object, config])
 	return base_multiplayer.object_configuration_add(object, config)
 
-func _object_configuration_remove(object, config: Variant) -> int:
+func _object_configuration_remove(object, config: Variant) -> Error:
 	if config is MultiplayerSynchronizer:
 		print(_get_unique_id_string() + ": Removing synchronization configuration for %s. Synchronizer: %s" % [object, config])
 	elif config is MultiplayerSpawner:
@@ -54,5 +54,5 @@ func _get_peer_ids() -> PackedInt32Array:
 func _get_remote_sender_id() -> int:
 	return base_multiplayer.get_remote_sender_id()
 	
-func _poll() -> int:
+func _poll() -> Error:
 	return base_multiplayer.poll()

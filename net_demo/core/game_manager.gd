@@ -171,10 +171,32 @@ func get_multiplayer_id() -> int:
 		
 	return -1
 	
+func auth_callback(p_id: int, p_pba: PackedByteArray) -> void:
+	if multiplayer.get_unique_id() == 1:
+		if (p_pba.get_string_from_ascii() == "PONG"):
+			multiplayer.base_multiplayer.complete_auth(p_id)
+	else:
+		if (p_id == 1 and p_pba.get_string_from_ascii() == "PING"):
+			multiplayer.base_multiplayer.send_auth(p_id, "PONG".to_ascii_buffer())
+			multiplayer.base_multiplayer.complete_auth(p_id)
+	
+func _peer_authenticating(p_id: int) -> void:
+	print("Peer %s is attempting to authenticate..." % p_id)
+	if multiplayer.get_unique_id() == 1:
+		multiplayer.base_multiplayer.send_auth(p_id, "PING".to_ascii_buffer())
+	
+func _peer_authentication_failed(p_id: int) -> void:
+	print("Peer %s failed to authenticate..." % p_id)
+	
+func _physics_process(p_delta: float):
+	multiplayer.poll()
+	
 func _ready() -> void:
 	randomize()
 	
 	get_tree().set_multiplayer(MultiplayerExtension.new())
+	
+	multiplayer.base_multiplayer.auth_callback = Callable(auth_callback)
 	
 	_update_window_title()
 	
@@ -193,5 +215,8 @@ func _ready() -> void:
 	assert(multiplayer.peer_connected.connect(_on_peer_connect) == OK)
 	assert(multiplayer.peer_disconnected.connect(_on_peer_disconnect) == OK)
 	assert(multiplayer.server_disconnected.connect(_on_server_disconnected) == OK)
+	
+	assert(multiplayer.base_multiplayer.peer_authenticating.connect(_peer_authenticating) == OK)
+	assert(multiplayer.base_multiplayer.peer_authentication_failed.connect(_peer_authentication_failed) == OK)
 	
 	Performance.add_custom_monitor("NetworkID", get_multiplayer_id, [])

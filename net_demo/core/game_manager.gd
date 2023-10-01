@@ -1,5 +1,7 @@
 extends Node
 
+var multiplayer_game_frames: int = 0
+
 var ingame_menu_visible: bool = false:
 	set(value):
 		ingame_menu_visible = value
@@ -53,15 +55,26 @@ func get_session_authority() -> int:
 		return player_list[0]
 		
 	return 1
+	
+func wait_for_scene_load():
+	# Yeeesh, this is ugly. We really should have proper callback signal
+	# or something for this.
+	for i in range(0, 2):
+		await get_tree().process_frame
 
 func load_main_menu_scene() -> void:
 	assert(get_tree().change_scene_to_file("res://net_demo/uiux/main_menu.tscn") == OK)
+	
 	ingame_menu_visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	await wait_for_scene_load()
 
 func load_default_scene() -> void:
 	assert(get_tree().change_scene_to_file("res://net_demo/scenes/SCENE_game_map.tscn") == OK)
 	ingame_menu_visible = false
+	
+	await wait_for_scene_load()
 	
 func get_random_spawn_point() -> Transform3D:
 	var spawn_points: Array = get_tree().get_nodes_in_group("spawners")
@@ -87,18 +100,24 @@ func _server_hosted() -> void:
 		var spawn_point_transform: Transform3D = get_random_spawn_point()
 		var _new_player: Node = player_spawner.spawn(player_spawner.get_player_spawn_buffer(1, spawn_point_transform))
 		
+	# Reset frames
+	multiplayer_game_frames = 0
+		
 func _on_connected_to_server() -> void:
 	print(str(multiplayer.get_unique_id()) + ": _on_connected_to_server")
 	
-	load_default_scene()
+	await load_default_scene()
 	
 	_update_window_title()
+	
+	# Reset frames
+	multiplayer_game_frames = 0
 	
 func _on_connection_failed() -> void:
 	print(str(multiplayer.get_unique_id()) + ": _on_connection_failed")
 	
 	_update_window_title()
-	load_main_menu_scene()
+	await load_main_menu_scene()
 
 func _on_peer_connect(p_id : int) -> void:
 	print(str(multiplayer.get_unique_id()) + ": _on_peer_connect(%s)" % str(p_id))
@@ -120,7 +139,7 @@ func _on_peer_disconnect(p_id : int) -> void:
 func _on_server_disconnected() -> void:
 	print(str(multiplayer.get_unique_id()) + ": _on_server_disconnected")
 	MultiplayerColorTable.clear_multiplayer_color_table()
-	load_main_menu_scene()
+	await load_main_menu_scene()
 		
 func host_server(p_port: int, p_max_players: int, p_dedicated: bool) -> void:
 	MultiplayerColorTable.reset_colors()
@@ -134,10 +153,11 @@ func host_server(p_port: int, p_max_players: int, p_dedicated: bool) -> void:
 		multiplayer.multiplayer_peer = peer
 	
 		_update_window_title()
-		load_default_scene()
-		call_deferred("_server_hosted")
+		await load_default_scene()
+		
+		_server_hosted()
 	else:
-		load_main_menu_scene()
+		await load_main_menu_scene()
 	
 func join_server(p_address: String, p_port: int) -> void:
 	MultiplayerColorTable.reset_colors()
@@ -181,22 +201,24 @@ func auth_callback(p_id: int, p_pba: PackedByteArray) -> void:
 			multiplayer.base_multiplayer.complete_auth(p_id)
 	
 func _peer_authenticating(p_id: int) -> void:
-	print("Peer %s is attempting to authenticate..." % p_id)
+	#print("Peer %s is attempting to authenticate..." % p_id)
 	if multiplayer.get_unique_id() == 1:
 		multiplayer.base_multiplayer.send_auth(p_id, "PING".to_ascii_buffer())
 	
 func _peer_authentication_failed(p_id: int) -> void:
 	print("Peer %s failed to authenticate..." % p_id)
 	
-func _physics_process(p_delta: float):
+func _physics_process(_delta: float):
+	multiplayer_game_frames += 1
 	multiplayer.poll()
 	
 func _ready() -> void:
 	randomize()
 	
 	get_tree().set_multiplayer(MultiplayerExtension.new())
+	get_tree().multiplayer_poll = false # Control this manually for timing precision
 	
-	multiplayer.base_multiplayer.auth_callback = Callable(auth_callback)
+	#multiplayer.base_multiplayer.auth_callback = Callable(auth_callback)
 	
 	_update_window_title()
 	

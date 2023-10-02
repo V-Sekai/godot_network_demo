@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://22qy7iinftdd"]
+[gd_scene load_steps=11 format=3 uid="uid://22qy7iinftdd"]
 
 [ext_resource type="Script" path="res://net_demo/core/player_controller.gd" id="1_u1u4j"]
 [ext_resource type="Script" path="res://net_demo/core/player_snapshot_interpolation.gd" id="2_7x5fr"]
@@ -6,25 +6,18 @@
 [ext_resource type="Script" path="res://net_demo/core/node3d_bobbing.gd" id="4_58mrl"]
 [ext_resource type="Script" path="res://net_demo/core/character_model_holder.gd" id="5_0vx7h"]
 [ext_resource type="PackedScene" uid="uid://coycdgq4vb4by" path="res://net_demo/uiux/ingame_gui.tscn" id="5_tyui0"]
+[ext_resource type="PackedScene" uid="uid://b1q8351tm8opt" path="res://net_demo/import/xbot/xbot.gltf" id="6_bl030"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i2lbj"]
 radius = 0.25
-height = 1.2
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jwtqx"]
 radius = 0.1
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_4gr6d"]
-radius = 0.25
-height = 1.2
-
-[sub_resource type="BoxMesh" id="BoxMesh_or605"]
-size = Vector3(0.1, 0.1, 0.5)
-
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jsh3q"]
 properties/0/path = NodePath("PlayerSnapshotInterpolation:sync_net_state")
-properties/0/spawn = false
-properties/0/sync = true
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [node name="PlayerController" type="CharacterBody3D" node_paths=PackedStringArray("camera_holder")]
 top_level = true
@@ -41,7 +34,7 @@ script = ExtResource("2_7x5fr")
 player_controller = NodePath("..")
 
 [node name="CollisionBody" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_i2lbj")
 
 [node name="CameraHolder" type="Node3D" parent="." node_paths=PackedStringArray("camera_pivot", "camera_spring_arm", "camera_bobbing", "third_person_model")]
@@ -73,23 +66,16 @@ far = 150.0
 [node name="AudioListener3D" type="AudioListener3D" parent="CameraHolder/CameraPivot/CameraBobbing/CameraSpringArm/MainCamera"]
 current = true
 
-[node name="CharacterModelHolder" type="Node3D" parent="."]
+[node name="CharacterModelHolder" type="Node3D" parent="." node_paths=PackedStringArray("character_mesh_instance")]
 script = ExtResource("5_0vx7h")
+character_mesh_instance = NodePath("ThirdPersonModel/xbot/Armature/GeneralSkeleton/Beta_Surface")
 
 [node name="ThirdPersonModel" type="Node3D" parent="CharacterModelHolder"]
 
-[node name="Base" type="MeshInstance3D" parent="CharacterModelHolder/ThirdPersonModel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
-mesh = SubResource("CapsuleMesh_4gr6d")
-skeleton = NodePath("")
-
-[node name="Pointer" type="MeshInstance3D" parent="CharacterModelHolder/ThirdPersonModel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.2)
-mesh = SubResource("BoxMesh_or605")
-skeleton = NodePath("../Base")
+[node name="xbot" parent="CharacterModelHolder/ThirdPersonModel" instance=ExtResource("6_bl030")]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_interval = 0.1
+replication_interval = 0.033
 replication_config = SubResource("SceneReplicationConfig_jsh3q")
 visibility_update_mode = 1
 
@@ -97,3 +83,20 @@ visibility_update_mode = 1
 
 [node name="GrabPosition" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1)
+
+[node name="RigidBodyInteraction" type="RigidBody3D" parent="."]
+top_level = true
+collision_layer = 8
+collision_mask = 8
+input_ray_pickable = false
+axis_lock_angular_z = true
+can_sleep = false
+freeze = true
+
+[node name="CollisionBody" type="CollisionShape3D" parent="RigidBodyInteraction"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_i2lbj")
+
+[connection signal="synchronized" from="MultiplayerSynchronizer" to="." method="_on_multiplayer_synchronizer_synchronized"]
+
+[editable path="CharacterModelHolder/ThirdPersonModel/xbot"]

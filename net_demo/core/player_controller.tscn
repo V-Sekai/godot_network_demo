@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://22qy7iinftdd"]
+[gd_scene load_steps=10 format=3 uid="uid://22qy7iinftdd"]
 
 [ext_resource type="Script" path="res://net_demo/core/player_controller.gd" id="1_u1u4j"]
 [ext_resource type="Script" path="res://net_demo/core/player_snapshot_interpolation.gd" id="2_7x5fr"]
@@ -6,10 +6,10 @@
 [ext_resource type="Script" path="res://net_demo/core/node3d_bobbing.gd" id="4_58mrl"]
 [ext_resource type="Script" path="res://net_demo/core/character_model_holder.gd" id="5_0vx7h"]
 [ext_resource type="PackedScene" uid="uid://coycdgq4vb4by" path="res://net_demo/uiux/ingame_gui.tscn" id="5_tyui0"]
-[ext_resource type="PackedScene" uid="uid://b1q8351tm8opt" path="res://net_demo/import/xbot/xbot.gltf" id="6_bl030"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i2lbj"]
 radius = 0.25
+height = 1.8
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jwtqx"]
 radius = 0.1
@@ -34,7 +34,7 @@ script = ExtResource("2_7x5fr")
 player_controller = NodePath("..")
 
 [node name="CollisionBody" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_i2lbj")
 
 [node name="CameraHolder" type="Node3D" parent="." node_paths=PackedStringArray("camera_pivot", "camera_spring_arm", "camera_bobbing", "third_person_model")]
@@ -66,13 +66,12 @@ far = 150.0
 [node name="AudioListener3D" type="AudioListener3D" parent="CameraHolder/CameraPivot/CameraBobbing/CameraSpringArm/MainCamera"]
 current = true
 
-[node name="CharacterModelHolder" type="Node3D" parent="." node_paths=PackedStringArray("character_mesh_instance")]
+[node name="CharacterModelHolder" type="Node3D" parent="."]
 script = ExtResource("5_0vx7h")
-character_mesh_instance = NodePath("ThirdPersonModel/xbot/Armature/GeneralSkeleton/Beta_Surface")
 
 [node name="ThirdPersonModel" type="Node3D" parent="CharacterModelHolder"]
 
-[node name="xbot" parent="CharacterModelHolder/ThirdPersonModel" instance=ExtResource("6_bl030")]
+[node name="xbot" type="Node3D" parent="CharacterModelHolder/ThirdPersonModel"]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_interval = 0.033
@@ -94,9 +93,7 @@ can_sleep = false
 freeze = true
 
 [node name="CollisionBody" type="CollisionShape3D" parent="RigidBodyInteraction"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_i2lbj")
 
 [connection signal="synchronized" from="MultiplayerSynchronizer" to="." method="_on_multiplayer_synchronizer_synchronized"]
-
-[editable path="CharacterModelHolder/ThirdPersonModel/xbot"]

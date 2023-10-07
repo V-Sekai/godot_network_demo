@@ -197,19 +197,18 @@ func auth_callback(p_id: int, p_pba: PackedByteArray) -> void:
 			multiplayer.base_multiplayer.complete_auth(p_id)
 	else:
 		if (p_id == 1 and p_pba.get_string_from_ascii() == "PING"):
-			multiplayer.base_multiplayer.send_auth(p_id, "PONG".to_ascii_buffer())
+			multiplayer.base_multiplayer.send_auth(p_id, "PONG".to_utf8_buffer())
 			multiplayer.base_multiplayer.complete_auth(p_id)
 	
 func _peer_authenticating(p_id: int) -> void:
-	#print("Peer %s is attempting to authenticate..." % p_id)
+	print("Peer %s is attempting to authenticate..." % p_id)
 	if multiplayer.get_unique_id() == 1:
 		multiplayer.base_multiplayer.send_auth(p_id, "PING".to_ascii_buffer())
 	
 func _peer_authentication_failed(p_id: int) -> void:
 	print("Peer %s failed to authenticate..." % p_id)
 	
-func _physics_process(_delta: float):
-	multiplayer_game_frames += 1
+func _physics_process(p_delta: float):
 	multiplayer.poll()
 	
 func _ready() -> void:
@@ -218,7 +217,7 @@ func _ready() -> void:
 	get_tree().set_multiplayer(MultiplayerExtension.new())
 	get_tree().multiplayer_poll = false # Control this manually for timing precision
 	
-	#multiplayer.base_multiplayer.auth_callback = Callable(auth_callback)
+	multiplayer.base_multiplayer.auth_callback = Callable(auth_callback)
 	
 	_update_window_title()
 	
